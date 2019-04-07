@@ -11,6 +11,7 @@
         "publish": "cd dist/ngx-scrollspy && npm publish --access public",
         "e2e": "ng e2e"
     },
+    "license": "MIT",
     "private": false,
     "dependencies": {
         "@angular/animations": "~7.2.0",

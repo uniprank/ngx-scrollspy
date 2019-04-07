@@ -1,5 +1,6 @@
 [![npm version](https://img.shields.io/npm/v/@uniprank/ngx-scrollspy.svg?style=flat)](https://www.npmjs.com/package/@uniprank/ngx-scrollspy)
-[![npm downloads](https://img.shields.io/npm/dm/@uniprank/ngx-scrollspy.svg)](https://npmjs.org/package/@uniprank/ngx-scrollspy)
+[![npm downloads](https://img.shields.io/npm/dm/@uniprank/ngx-scrollspy.svg?style=flat)](https://npmjs.org/package/@uniprank/ngx-scrollspy)
+[![npm license](https://img.shields.io/npm/l/@uniprank/ngx-scrollspy.svg)](https://npmjs.org/package/@uniprank/ngx-scrollspy)
 
 You can use this angular service to spy scroll events from `window` or any other scrollable element.
 
@@ -47,7 +48,7 @@ export class AppModule {}
 
 #### Spy window scroll
 
-Use `ScrollSpyDirective` to spy on window as default or set also element to spy on a scroll element.
+Use `ScrollSpyDirective` to spy on window as default or set also element to spy on a other scroll able element.
 
 ```js
 import { NgModule, Component, Injectable, AfterViewInit } from '@angular/core';
@@ -85,7 +86,7 @@ export class AppComponent implements AfterViewInit {
 #### Spy any element scroll
 
 Use `ScrollSpyElementDirective` to spy on any element. You must give an unique id to each instance.
-This unique id is called elementId and you need this elementId to connect your `ScrollSpyItemDirective` or your `ScrollSpyDirective`.
+This unique id is called elementID and you need this elementID to connect your `ScrollSpyItemDirective` or your `ScrollSpyDirective`.
 
 ```js
 import { NgModule, Component, Injectable, AfterViewInit } from '@angular/core';

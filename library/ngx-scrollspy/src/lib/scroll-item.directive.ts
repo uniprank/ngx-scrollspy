@@ -27,11 +27,14 @@ export class ScrollItemDirective implements OnDestroy, AfterViewInit {
 
     ngAfterViewInit(): void {
         this._subscriber = this._scrollSpyService.observe(this.scrollElement).subscribe(element => {
+            let _active;
             if (element != null) {
-                const _active = element.id === this.itemId;
+                _active = element.id === this.itemId;
                 this.activeEvent.emit(_active);
-                setTimeout(() => (this.classActive = _active));
+            } else {
+                _active = false;
             }
+            setTimeout(() => (this.classActive = _active));
         });
     }
 }
