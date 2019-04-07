@@ -6,7 +6,7 @@ export { ScrollDirectionEnum } from './lib/scroll-direction.enum';
 
 // interfaces
 export { ScrollObjectInterface } from './lib/scroll-object.interface';
-export { ScrollStreamInterface } from './lib/scroll-stream.interface';
+export { ScrollElementInterface } from './lib/scroll-element.interface';
 
 // services
 export { ScrollSpyService } from './lib/scroll-spy.service';

@@ -10,7 +10,7 @@ export class ScrollItemDirective implements OnDestroy, AfterViewInit {
     @HostBinding('class.active') classActive: boolean = false;
 
     @Input('uniScrollItem') itemId: string;
-    @Input() stream: string = 'window';
+    @Input() scrollElement: string = 'window';
 
     @Output() activeEvent: EventEmitter<boolean> = new EventEmitter();
 
@@ -26,7 +26,7 @@ export class ScrollItemDirective implements OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this._subscriber = this._scrollSpyService.observe(this.stream).subscribe(element => {
+        this._subscriber = this._scrollSpyService.observe(this.scrollElement).subscribe(element => {
             if (element != null) {
                 const _active = element.id === this.itemId;
                 this.activeEvent.emit(_active);

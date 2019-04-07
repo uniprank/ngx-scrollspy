@@ -47,7 +47,7 @@ export class AppModule {}
 
 #### Spy window scroll
 
-Use `ScrollSpyDirective` to spy on window as default or set also stream to spy on a other scroll able element.
+Use `ScrollSpyDirective` to spy on window as default or set also element to spy on a other scroll able element.
 
 ```js
 import { NgModule, Component, Injectable, AfterViewInit } from '@angular/core';
@@ -85,7 +85,7 @@ export class AppComponent implements AfterViewInit {
 #### Spy any element scroll
 
 Use `ScrollSpyElementDirective` to spy on any element. You must give an unique id to each instance.
-This unique id is called streamID and you need this streamID to connect your `ScrollSpyItemDirective` or your `ScrollSpyDirective`.
+This unique id is called elementID and you need this elementID to connect your `ScrollSpyItemDirective` or your `ScrollSpyDirective`.
 
 ```js
 import { NgModule, Component, Injectable, AfterViewInit } from '@angular/core';
@@ -95,10 +95,10 @@ import { ScrollSpyModule, ScrollSpyService, ScrollObjectInterface } from '@unipr
 @Component({
 	selector: 'yourComponent',
   template: `
-  <div uniScrollSpyItem="part2" stream="test">Get class active if part2 is in focus.</div>
+  <div uniScrollSpyItem="part2" element="test">Get class active if part2 is in focus.</div>
 	<div uniScrollSpyElement="test" style="max-height: 100px; overflow: auto;">
-		<div uniScrollSpy="part1" stream="test" style="height: 500px;"></div>
-		<div uniScrollSpy="part2" stream="test" style="height: 500px;"></div>
+		<div uniScrollSpy="part1" element="test" style="height: 500px;"></div>
+		<div uniScrollSpy="part2" element="test" style="height: 500px;"></div>
 	</div>`
 })
 export class YourComponent implements AfterViewInit {

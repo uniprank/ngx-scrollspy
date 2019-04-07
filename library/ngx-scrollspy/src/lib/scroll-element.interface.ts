@@ -2,7 +2,7 @@ import { ElementRef } from '@angular/core';
 
 import { ScrollDirectionEnum } from './scroll-direction.enum';
 
-export interface ScrollStreamInterface {
+export interface ScrollElementInterface {
     id: string;
     elementRef: ElementRef;
     direction: ScrollDirectionEnum;

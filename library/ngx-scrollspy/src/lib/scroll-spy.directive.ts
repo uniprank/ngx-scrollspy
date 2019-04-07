@@ -10,7 +10,7 @@ export class ScrollSpyDirective implements AfterViewInit, OnDestroy {
     @HostBinding('class.active') classActive: boolean = false;
 
     @Input('uniScrollSpy') itemId: string;
-    @Input() stream: string = 'window';
+    @Input() scrollElement: string = 'window';
 
     private _subscriber: Subscription;
 
@@ -23,13 +23,13 @@ export class ScrollSpyDirective implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this._subscriber = this._scrollSpyService.observe(this.stream).subscribe(element => {
+        this._subscriber = this._scrollSpyService.observe(this.scrollElement).subscribe(element => {
             if (element != null) {
                 const _active = element.id === this.itemId;
                 setTimeout(() => (this.classActive = _active));
             }
         });
-        this._scrollSpyService.setItem(this.itemId, this._el, this.stream);
+        this._scrollSpyService.setItem(this.itemId, this._el, this.scrollElement);
         this._el.nativeElement.setAttribute('id', this.itemId);
     }
 }

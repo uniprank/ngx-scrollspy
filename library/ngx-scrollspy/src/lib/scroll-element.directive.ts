@@ -7,22 +7,22 @@ import { ScrollSpyService } from './scroll-spy.service';
     selector: '[uniScrollElement]'
 })
 export class ScrollElementDirective implements OnInit, OnDestroy {
-    @Input('uniScrollElement') streamId: string;
+    @Input('uniScrollElement') elementId: string;
     @Input() direction: ScrollDirectionEnum = ScrollDirectionEnum.vertical;
 
     @HostListener('scroll', ['$event'])
     onScroll($event) {
-        this._scrollSpyService.updateStream(this.streamId);
+        this._scrollSpyService.updateScrollElement(this.elementId);
     }
 
     constructor(private _el: ElementRef, private _scrollSpyService: ScrollSpyService) {}
 
     ngOnInit(): void {
-        this._scrollSpyService.setStream(this.streamId, this._el, this.direction);
-        this._el.nativeElement.setAttribute('id', this.streamId);
+        this._scrollSpyService.setScrollElement(this.elementId, this._el, this.direction);
+        this._el.nativeElement.setAttribute('id', this.elementId);
     }
 
     ngOnDestroy(): void {
-        this._scrollSpyService.deleteStream(this.streamId);
+        this._scrollSpyService.deleteScrollElement(this.elementId);
     }
 }

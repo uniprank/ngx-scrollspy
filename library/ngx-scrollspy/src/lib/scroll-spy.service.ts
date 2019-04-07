@@ -2,157 +2,157 @@ import { Injectable, ElementRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ScrollObjectInterface } from './scroll-object.interface';
-import { ScrollStreamInterface } from './scroll-stream.interface';
+import { ScrollElementInterface } from './scroll-element.interface';
 import { ScrollDirectionEnum } from './scroll-direction.enum';
 
-const defaultStream = 'window';
+const defaultElement = 'window';
 
 @Injectable()
 export class ScrollSpyService {
     private _items: { [itemId: string]: ScrollObjectInterface } = {};
-    private _streams: { [streamId: string]: ScrollStreamInterface } = {};
-    private _$streamListener: { [streamId: string]: BehaviorSubject<ScrollObjectInterface> } = {};
+    private _scrollElements: { [scrollElementId: string]: ScrollElementInterface } = {};
+    private _$scrollElementListener: { [scrollElementId: string]: BehaviorSubject<ScrollObjectInterface> } = {};
 
     constructor() {
-        this._streams[defaultStream] = this._generateStream(
-            defaultStream,
+        this._scrollElements[defaultElement] = this._generateElement(
+            defaultElement,
             new ElementRef(document.documentElement || document.body),
             ScrollDirectionEnum.vertical
         );
-        this._$streamListener[defaultStream] = new BehaviorSubject(null);
+        this._$scrollElementListener[defaultElement] = new BehaviorSubject(null);
         window.addEventListener('scroll', event => {
             this._windowScroll(event);
         });
     }
 
     private _windowScroll($event) {
-        this.updateStream(defaultStream);
+        this.updateScrollElement(defaultElement);
     }
 
-    private _generateStream(
-        streamId: string,
+    private _generateElement(
+        scrollElementId: string,
         elementRef: ElementRef,
         direction: ScrollDirectionEnum,
         offset: number = 0
-    ): ScrollStreamInterface {
+    ): ScrollElementInterface {
         return {
-            id: streamId,
+            id: scrollElementId,
             elementRef,
             direction,
             offset
         };
     }
 
-    public setOffset(streamId: string, offset: number): void {
-        this._checkStreamExists(streamId);
-        this._streams[streamId].offset = offset;
+    public setOffset(scrollElementId: string, offset: number): void {
+        this._checkScrollElementExists(scrollElementId);
+        this._scrollElements[scrollElementId].offset = offset;
     }
 
-    public setStream(streamId: string, elementRef: ElementRef, direction: ScrollDirectionEnum, offset: number = 0): void {
-        this._checkStreamNotExists(streamId);
+    public setScrollElement(scrollElementId: string, elementRef: ElementRef, direction: ScrollDirectionEnum, offset: number = 0): void {
+        this._checkScrollElementNotExists(scrollElementId);
 
-        this._streams[streamId] = this._generateStream(streamId, elementRef, direction, offset);
-        this._$streamListener[streamId] = new BehaviorSubject(null);
+        this._scrollElements[scrollElementId] = this._generateElement(scrollElementId, elementRef, direction, offset);
+        this._$scrollElementListener[scrollElementId] = new BehaviorSubject(null);
     }
 
-    private _checkStreamNotExists(streamId: string): void {
-        if (this._streams[streamId] != null) {
-            throw new Error(`ScrollSpyService: The stream with the id [${streamId}] exists.`);
+    private _checkScrollElementNotExists(scrollElementId: string): void {
+        if (this._scrollElements[scrollElementId] != null) {
+            throw new Error(`ScrollSpyService: The scroll element with the id [${scrollElementId}] exists.`);
         }
     }
 
-    public setItem(iteamId: string, elementRef: ElementRef, stream = defaultStream): void {
+    public setItem(iteamId: string, elementRef: ElementRef, scrollElement = defaultElement): void {
         this._checkItemNotExists(iteamId);
-        this._items[iteamId] = this._generateScrollObject(iteamId, elementRef, stream);
+        this._items[iteamId] = this._generateScrollObject(iteamId, elementRef, scrollElement);
     }
 
     private _checkItemNotExists(iteamId: string): void {
         if (this._items[iteamId] != null) {
-            throw new Error(`ScrollSpyService: The element with the id [${iteamId}] exists.`);
+            throw new Error(`ScrollSpyService: The scroll item with the id [${iteamId}] exists.`);
         }
     }
 
-    private _generateScrollObject(id: string, elementRef: ElementRef, stream: string): ScrollObjectInterface {
+    private _generateScrollObject(id: string, elementRef: ElementRef, scrollElement: string): ScrollObjectInterface {
         return {
             id,
-            stream,
+            scrollElement: scrollElement,
             elementRef,
             nativeElement: elementRef.nativeElement
         };
     }
 
-    public observe(streamId: string = defaultStream): Observable<ScrollObjectInterface> {
-        this._checkStreamExists(streamId);
-        return this._$streamListener[streamId].asObservable();
+    public observe(scrollElementId: string = defaultElement): Observable<ScrollObjectInterface> {
+        this._checkScrollElementExists(scrollElementId);
+        return this._$scrollElementListener[scrollElementId].asObservable();
     }
 
-    private _checkStreamExists(streamId: string): void {
-        if (this._streams[streamId] == null) {
-            throw new Error(`ScrollSpyService: The stream with the id [${streamId}] doesn't exist.`);
+    private _checkScrollElementExists(scrollElementId: string): void {
+        if (this._scrollElements[scrollElementId] == null) {
+            throw new Error(`ScrollSpyService: The scroll element with the id [${scrollElementId}] doesn't exist.`);
         }
     }
 
-    public updateStream(streamId: string): void {
-        this._checkStreamExists(streamId);
+    public updateScrollElement(scrollElementId: string): void {
+        this._checkScrollElementExists(scrollElementId);
 
-        const _stream = this._streams[streamId];
-        const _streamItems = this._getStreamItems(streamId);
+        const _element = this._scrollElements[scrollElementId];
+        const _elementItems = this._getElementItems(scrollElementId);
 
-        const _nextActiveItem = this._getActiveItem(_stream, _streamItems);
-        const _currentActiveItem = this._$streamListener[streamId].getValue();
+        const _nextActiveItem = this._getActiveItem(_element, _elementItems);
+        const _currentActiveItem = this._$scrollElementListener[scrollElementId].getValue();
 
         if (_currentActiveItem == null) {
             if (_nextActiveItem != null) {
-                setTimeout(() => this._$streamListener[streamId].next(_nextActiveItem));
+                setTimeout(() => this._$scrollElementListener[scrollElementId].next(_nextActiveItem));
             }
         } else if (_nextActiveItem != null) {
             if (_currentActiveItem.id !== _nextActiveItem.id) {
-                setTimeout(() => this._$streamListener[streamId].next(_nextActiveItem));
+                setTimeout(() => this._$scrollElementListener[scrollElementId].next(_nextActiveItem));
             }
         }
     }
 
-    private _getStreamItems(stream: string): Array<ScrollObjectInterface> {
+    private _getElementItems(scrollElement: string): Array<ScrollObjectInterface> {
         const _items = [];
         for (let key in this._items) {
             const value = this._items[key];
-            if (value.stream === stream) {
+            if (value.scrollElement === scrollElement) {
                 _items.push(value);
             }
         }
         return _items;
     }
 
-    private _getActiveItem(streamObject: ScrollStreamInterface, listOfElements: Array<ScrollObjectInterface>): ScrollObjectInterface {
-        const _direction = streamObject.direction;
+    private _getActiveItem(scrollElement: ScrollElementInterface, listOfElements: Array<ScrollObjectInterface>): ScrollObjectInterface {
+        const _direction = scrollElement.direction;
         let _scrollObject = null;
 
-        const nativeStreamElement = streamObject.elementRef.nativeElement;
-        listOfElements.forEach(element => {
+        const nativeElement = scrollElement.elementRef.nativeElement;
+        listOfElements.forEach(_element => {
             let _active: boolean = false;
             switch (_direction) {
                 case ScrollDirectionEnum.horizontal:
-                    _active = element.nativeElement.offsetLeft <= nativeStreamElement.scrollLeft + streamObject.offset;
+                    _active = _element.nativeElement.offsetLeft <= nativeElement.scrollLeft + scrollElement.offset;
                     break;
 
                 default: {
-                    _active = element.nativeElement.offsetTop <= nativeStreamElement.scrollTop + streamObject.offset;
+                    _active = _element.nativeElement.offsetTop <= nativeElement.scrollTop + scrollElement.offset;
                 }
             }
             if (_active) {
-                _scrollObject = element;
+                _scrollObject = _element;
             }
         });
         return _scrollObject;
     }
 
-    public deleteStream(streamId: string): void {
-        if (streamId === 'window') {
-            this._$streamListener[streamId].next(null);
+    public deleteScrollElement(scrollElementId: string): void {
+        if (scrollElementId === 'window') {
+            this._$scrollElementListener[scrollElementId].next(null);
         } else {
-            this._checkStreamExists(streamId);
-            delete this._streams[streamId];
-            delete this._$streamListener[streamId];
+            this._checkScrollElementExists(scrollElementId);
+            delete this._scrollElements[scrollElementId];
+            delete this._$scrollElementListener[scrollElementId];
         }
     }
 
@@ -163,7 +163,7 @@ export class ScrollSpyService {
 
     private _checkItemExists(iteamId: string): void {
         if (this._items[iteamId] == null) {
-            throw new Error(`ScrollSpyService: The element with the id [${iteamId}] doesn't exist.`);
+            throw new Error(`ScrollSpyService: The scroll item with the id [${iteamId}] doesn't exist.`);
         }
     }
 }
