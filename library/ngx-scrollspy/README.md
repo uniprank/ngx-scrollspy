@@ -59,7 +59,7 @@ import { ScrollSpyModule, ScrollSpyService, ScrollObjectInterface } from '@unipr
 @Injectable()
 @Component({
 	selector: 'app',
-	template: `<div uniScrollSpy></div>`
+	template: `<div uniScrollSpy="section-abc"></div>`
 })
 export class AppComponent implements AfterViewInit {
 	constructor(private _scrollSpyService: ScrollSpyService) {}
@@ -96,10 +96,10 @@ import { ScrollSpyModule, ScrollSpyService, ScrollObjectInterface } from '@unipr
 @Component({
 	selector: 'yourComponent',
   template: `
-  <div uniScrollSpyItem="part2" element="test">Get class active if part2 is in focus.</div>
+  <div uniScrollSpyItem="part2" scrollElement="test">Get class active if part2 is in focus.</div>
 	<div uniScrollSpyElement="test" style="max-height: 100px; overflow: auto;">
-		<div uniScrollSpy="part1" element="test" style="height: 500px;"></div>
-		<div uniScrollSpy="part2" element="test" style="height: 500px;"></div>
+		<div uniScrollSpy="part1" style="height: 500px;"></div>
+		<div uniScrollSpy="part2" style="height: 500px;"></div>
 	</div>`
 })
 export class YourComponent implements AfterViewInit {

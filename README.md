@@ -1,5 +1,6 @@
 [![npm version](https://img.shields.io/npm/v/@uniprank/ngx-scrollspy.svg?style=flat)](https://www.npmjs.com/package/@uniprank/ngx-scrollspy)
 [![npm downloads](https://img.shields.io/npm/dm/@uniprank/ngx-scrollspy.svg?style=flat)](https://npmjs.org/package/@uniprank/ngx-scrollspy)
+[![npm license](https://img.shields.io/npm/l/@uniprank/ngx-scrollspy.svg)](https://npmjs.org/package/@uniprank/ngx-scrollspy)
 
 You can use this angular service to spy scroll events from `window` or any other scrollable element.
 
@@ -58,7 +59,7 @@ import { ScrollSpyModule, ScrollSpyService, ScrollObjectInterface } from '@unipr
 @Injectable()
 @Component({
 	selector: 'app',
-	template: `<div uniScrollSpy></div>`
+	template: `<div uniScrollSpy="section-abc"></div>`
 })
 export class AppComponent implements AfterViewInit {
 	constructor(private _scrollSpyService: ScrollSpyService) {}
@@ -95,10 +96,10 @@ import { ScrollSpyModule, ScrollSpyService, ScrollObjectInterface } from '@unipr
 @Component({
 	selector: 'yourComponent',
   template: `
-  <div uniScrollSpyItem="part2" element="test">Get class active if part2 is in focus.</div>
+  <div uniScrollSpyItem="part2" scrollElement="test">Get class active if part2 is in focus.</div>
 	<div uniScrollSpyElement="test" style="max-height: 100px; overflow: auto;">
-		<div uniScrollSpy="part1" element="test" style="height: 500px;"></div>
-		<div uniScrollSpy="part2" element="test" style="height: 500px;"></div>
+		<div uniScrollSpy="part1" style="height: 500px;"></div>
+		<div uniScrollSpy="part2" style="height: 500px;"></div>
 	</div>`
 })
 export class YourComponent implements AfterViewInit {
