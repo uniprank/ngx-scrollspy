@@ -36,13 +36,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ScrollSpyModule } from '@uniprank/ngx-scrollspy';
 
 @NgModule({
-  imports: [
-  	BrowserModule,
-  	ScrollSpyModule.forRoot()
-  ],
-  declarations: [ AppComponent ],
-  bootstrap: [ AppComponent ]
+    imports: [BrowserModule, ScrollSpyModule.forRoot()],
+    declarations: [AppComponent],
+    bootstrap: [AppComponent]
 })
+export class AppModule {}
 ```
 
 ## Using
