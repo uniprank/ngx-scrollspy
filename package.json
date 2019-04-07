@@ -3,10 +3,11 @@
     "version": "0.0.0",
     "scripts": {
         "ng": "ng",
-        "start": "ng serve",
+        "start": "ng serve --project=TestCases",
         "build": "ng build",
         "test": "ng test",
         "lint": "ng lint",
+        "publish": "npm publish --access public --prefix ./dist/ngx-scrollspy",
         "e2e": "ng e2e"
     },
     "private": true,

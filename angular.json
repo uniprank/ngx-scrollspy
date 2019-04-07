@@ -138,34 +138,6 @@
                     }
                 }
             }
-        },
-        "TestCases-e2e": {
-            "root": "library/TestCases-e2e/",
-            "projectType": "application",
-            "prefix": "",
-            "architect": {
-                "e2e": {
-                    "builder": "@angular-devkit/build-angular:protractor",
-                    "options": {
-                        "protractorConfig": "library/TestCases-e2e/protractor.conf.js",
-                        "devServerTarget": "TestCases:serve"
-                    },
-                    "configurations": {
-                        "production": {
-                            "devServerTarget": "TestCases:serve:production"
-                        }
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": "library/TestCases-e2e/tsconfig.e2e.json",
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
-                    }
-                }
-            }
         }
     },
     "defaultProject": "ngx-scrollspy"
