@@ -8,10 +8,10 @@
         "build:testcases": "ng build --project=TestCases --prod",
         "test": "ng test",
         "lint": "ng lint",
-        "publish": "npm publish --access public --prefix ./dist/ngx-scrollspy",
+        "publish": "cd dist/ngx-scrollspy && npm publish --access public",
         "e2e": "ng e2e"
     },
-    "private": true,
+    "private": false,
     "dependencies": {
         "@angular/animations": "~7.2.0",
         "@angular/common": "~7.2.0",
