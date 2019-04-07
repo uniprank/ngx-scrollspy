@@ -18,7 +18,7 @@ If you use SystemJS to load your files, you might have to update your config wit
 ```js
 System.config({
     packages: {
-        '@uniraank/ngx-scrollspy': { defaultExtension: 'js' }
+        '@uniprank/ngx-scrollspy': { defaultExtension: 'js' }
     }
 });
 ```
