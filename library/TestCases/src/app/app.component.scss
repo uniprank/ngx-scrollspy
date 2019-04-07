@@ -1,0 +1,27 @@
+:host {
+    display: block;
+
+    header {
+        position: sticky;
+        top: 0;
+        max-height: 50px;
+        overflow: hidden;
+
+        nav {
+            background-color: darkblue;
+            display: flex;
+            flex-direction: row;
+
+            a {
+                padding: 1rem;
+                color: rgba(255, 255, 255, .8);
+                text-decoration: none;
+
+                &.router-link-active {
+                    color: white;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}

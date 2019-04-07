@@ -1,0 +1,18 @@
+{
+    "name": "@uniprank/ngx-scrollspy",
+    "version": "0.0.1",
+    "author": {
+        "name": "Dennis Fiedler",
+        "email": "npm-package@uniprank.com",
+        "url": "https://uniprank.com/"
+    },
+    "license": "SEE LICENSE IN <LICENSE>",
+    "keywords": ["angular", "scrollspy", "scroll", "scroll spy"],
+    "homepage": "https://github.com/uniprank/ngx-scrollspy#readme",
+    "description": "This is a library to detect scroll events with a servie or directives.",
+    "private": false,
+    "peerDependencies": {
+        "@angular/common": "^7.2.0",
+        "@angular/core": "^7.2.0"
+    }
+}
