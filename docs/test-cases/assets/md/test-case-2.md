@@ -1,5 +1,23 @@
-<markdown [src]="'assets/md/test-case-2.md'"></markdown>
-<h2>Examples</h2>
+You can find the complete test case at GitHub. [Test Case 2](https://github.com/uniprank/ngx-scrollspy/tree/master/library/TestCases/src/app/modules/test-case2)
+
+## TestCase2Component
+
+```js
+@Component({
+    selector: 'app-test-case2',
+    templateUrl: './test-case2.component.html',
+    styleUrls: ['./test-case2.component.scss']
+})
+export class TestCase2Component implements OnInit {
+    constructor() {}
+
+    ngOnInit() {}
+}
+```
+
+## TestCase1Component HTML
+
+```html
 <div>
     <h2>Overview</h2>
     <nav>
@@ -34,3 +52,4 @@
         <section uniScrollSpy="section8" stream="overview2" class="section4"></section>
     </div>
 </div>
+```

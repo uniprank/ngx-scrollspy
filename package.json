@@ -5,6 +5,7 @@
         "ng": "ng",
         "start": "ng serve --project=TestCases",
         "build": "ng build",
+        "build:testcases": "ng build --project=TestCases --prod",
         "test": "ng test",
         "lint": "ng lint",
         "publish": "npm publish --access public --prefix ./dist/ngx-scrollspy",
@@ -21,6 +22,8 @@
         "@angular/platform-browser-dynamic": "~7.2.0",
         "@angular/router": "~7.2.0",
         "core-js": "^2.5.4",
+        "ngx-markdown": "^7.1.5",
+        "prismjs": "^1.16.0",
         "rxjs": "~6.3.3",
         "tslib": "^1.9.0",
         "zone.js": "~0.8.26"

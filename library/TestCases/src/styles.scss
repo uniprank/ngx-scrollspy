@@ -36,3 +36,7 @@ h4 {
     font-size: 1.1rem;
     font-weight: 100;
 }
+
+pre[class*="language-"] {
+    border-radius: 0 !important;
+}

@@ -63,9 +63,15 @@
                             "library/TestCases/src/assets"
                         ],
                         "styles": [
-                            "library/TestCases/src/styles.scss"
+                            "library/TestCases/src/styles.scss",
+                            "node_modules/prismjs/themes/prism-solarizedlight.css"
                         ],
-                        "scripts": [],
+                        "scripts": [
+                            "node_modules/marked/lib/marked.js",
+                            "node_modules/prismjs/prism.js",
+                            "node_modules/prismjs/components/prism-typescript.min.js",
+                            "node_modules/prismjs/components/prism-css.min.js"
+                        ],
                         "es5BrowserSupport": true
                     },
                     "configurations": {
