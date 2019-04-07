@@ -36,6 +36,7 @@ MIT
 MIT
 
 @uniprank/ngx-scrollspy
+SEE LICENSE IN <LICENSE>
 
 core-js
 MIT

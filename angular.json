@@ -52,6 +52,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
+                        "baseHref": "/ngx-scrollspy/test-cases/",
                         "outputPath": "docs/test-cases",
                         "index": "library/TestCases/src/index.html",
                         "main": "library/TestCases/src/main.ts",
