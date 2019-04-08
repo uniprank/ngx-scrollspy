@@ -28,8 +28,8 @@ export class TestCase1Component implements OnInit {
         <li uniScrollItem="section4">Section 4</li>
     </ul>
 </nav>
-<section uniScrollSpy="section1" class="section1"></section>
-<section uniScrollSpy="section2" class="section2"></section>
-<section uniScrollSpy="section3" class="section3"></section>
-<section uniScrollSpy="section4" class="section4"></section>
+<section uniScrollSpy="section1"></section>
+<section uniScrollSpy="section2"></section>
+<section uniScrollSpy="section3"></section>
+<section uniScrollSpy="section4"></section>
 ```
