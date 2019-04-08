@@ -89,16 +89,33 @@ export class ScrollSpyService {
         }
     }
 
-    public changeScrollElement(itemId: string, oldId: string, newId: string, override = false) {
-        this._checkScrollElementExists(oldId);
-        this._checkScrollElementExists(newId);
+    public changeScrollElement(itemId: string, oldElementId: string, newElementId: string, override = false) {
+        this._checkScrollElementExists(oldElementId);
+        this._checkScrollElementExists(newElementId);
         this._checkItemExists(itemId);
 
         const _scrollItem = this._scrollItems[itemId];
         if ((_scrollItem.scrollElementId !== defaultElementId && override) || _scrollItem.scrollElementId === defaultElementId) {
-            this._scrollItems[itemId].scrollElementId = newId;
+            this._scrollItems[itemId].scrollElementId = newElementId;
         }
-        this._setDefaultItem(itemId, newId);
+
+        this._setDefaultItem(itemId, newElementId);
+
+        const _oldElements = this._getElementItems(oldElementId);
+        if (_oldElements.length > 0) {
+            this._setDefaultItem(_oldElements[0].id, oldElementId);
+        }
+    }
+
+    private _getElementItems(scrollElementId: string): Array<ScrollObjectInterface> {
+        const _items = [];
+        for (let key in this._scrollItems) {
+            const value = this._scrollItems[key];
+            if (value.scrollElementId === scrollElementId) {
+                _items.push(value);
+            }
+        }
+        return _items;
     }
 
     private _checkItemExists(itemId: string): void {
@@ -136,17 +153,6 @@ export class ScrollSpyService {
                 setTimeout(() => this._$scrollElementListener[scrollElementId].next(_nextActiveItem));
             }
         }
-    }
-
-    private _getElementItems(scrollElementId: string): Array<ScrollObjectInterface> {
-        const _items = [];
-        for (let key in this._scrollItems) {
-            const value = this._scrollItems[key];
-            if (value.scrollElementId === scrollElementId) {
-                _items.push(value);
-            }
-        }
-        return _items;
     }
 
     private _getActiveItem(scrollElement: ScrollElementInterface, listOfElements: Array<ScrollObjectInterface>): ScrollObjectInterface {
