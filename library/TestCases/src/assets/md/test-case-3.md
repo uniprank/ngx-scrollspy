@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+You can find the complete test case at GitHub. [Test Case 3](https://github.com/uniprank/ngx-scrollspy/tree/master/library/TestCases/src/app/modules/test-case3)
 
-import { ScrollSpyService } from '@uniprank/ngx-scrollspy';
+## TestCase3Component
 
+```js
 @Component({
     selector: 'app-test-case3',
     templateUrl: './test-case3.component.html',
@@ -37,3 +37,25 @@ export class TestCase3Component implements OnInit, OnDestroy {
         }
     }
 }
+```
+
+## TestCase3Component HTML
+
+```html
+<nav>
+    <ul>
+        <li uniScrollItem="section1">Section 1</li>
+        <li uniScrollItem="section2">Section 2</li>
+        <li uniScrollItem="section3">Section 3</li>
+        <li uniScrollItem="section4">Section 4</li>
+        <li>
+            Active Section: [ <span [innerHtml]="(activeSection | async).id"></span>,
+            <span [innerHtml]="(activeSection | async).elementId"></span> ]
+        </li>
+    </ul>
+</nav>
+<section uniScrollSpy="section1"></section>
+<section uniScrollSpy="section2"></section>
+<section uniScrollSpy="section3"></section>
+<section uniScrollSpy="section4"></section>
+```

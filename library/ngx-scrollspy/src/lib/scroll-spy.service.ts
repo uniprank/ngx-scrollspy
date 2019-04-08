@@ -13,16 +13,26 @@ export class ScrollSpyService {
     private _scrollElements: { [scrollElementId: string]: ScrollElementInterface } = {};
     private _$scrollElementListener: { [scrollElementId: string]: BehaviorSubject<ScrollObjectInterface> } = {};
 
+    private _scrollElementListener: { [scrollElementId: string]: ScrollObjectInterface } = {};
+
     constructor() {
-        this._scrollElements[defaultElementId] = this._generateScrollElement(
+        this._initScrollElementListener(
             defaultElementId,
-            new ElementRef(document.documentElement || document.body),
-            ScrollDirectionEnum.vertical
+            this._generateScrollElement(
+                defaultElementId,
+                new ElementRef(document.documentElement || document.body),
+                ScrollDirectionEnum.vertical
+            )
         );
-        this._$scrollElementListener[defaultElementId] = new BehaviorSubject(null);
         window.addEventListener('scroll', event => {
             this._windowScroll(event);
         });
+    }
+
+    private _initScrollElementListener(scrollElementId: string, scrollElement: ScrollElementInterface): void {
+        this._scrollElements[scrollElementId] = scrollElement;
+        this._scrollElementListener[scrollElementId] = null;
+        this._$scrollElementListener[scrollElementId] = new BehaviorSubject(null);
     }
 
     private _windowScroll($event) {
@@ -50,9 +60,7 @@ export class ScrollSpyService {
 
     public setScrollElement(scrollElementId: string, elementRef: ElementRef, direction: ScrollDirectionEnum, offset: number = 0): void {
         this._checkScrollElementNotExists(scrollElementId);
-
-        this._scrollElements[scrollElementId] = this._generateScrollElement(scrollElementId, elementRef, direction, offset);
-        this._$scrollElementListener[scrollElementId] = new BehaviorSubject(null);
+        this._initScrollElementListener(scrollElementId, this._generateScrollElement(scrollElementId, elementRef, direction, offset));
     }
 
     private _checkScrollElementNotExists(scrollElementId: string): void {
@@ -83,10 +91,15 @@ export class ScrollSpyService {
     }
 
     private _setDefaultItem(itemId: string, scrollElementId: string): void {
-        const _value = this._$scrollElementListener[scrollElementId].getValue();
+        const _value = this._scrollElementListener[scrollElementId];
         if (_value == null) {
-            this._$scrollElementListener[scrollElementId].next(this._scrollItems[itemId]);
+            this._setScrollElementListener(scrollElementId, this._scrollItems[itemId]);
         }
+    }
+
+    private _setScrollElementListener(scrollElementId: string, scrollObject: ScrollObjectInterface): void {
+        this._scrollElementListener[scrollElementId] = scrollObject;
+        setTimeout(() => this._$scrollElementListener[scrollElementId].next(scrollObject));
     }
 
     public changeScrollElement(itemId: string, oldElementId: string, newElementId: string, override = false) {
@@ -142,15 +155,15 @@ export class ScrollSpyService {
         const _elementItems = this._getElementItems(scrollElementId);
 
         const _nextActiveItem = this._getActiveItem(_element, _elementItems);
-        const _currentActiveItem = this._$scrollElementListener[scrollElementId].getValue();
+        const _currentActiveItem = this._scrollElementListener[scrollElementId];
 
         if (_currentActiveItem == null) {
             if (_nextActiveItem != null) {
-                setTimeout(() => this._$scrollElementListener[scrollElementId].next(_nextActiveItem));
+                this._setScrollElementListener(scrollElementId, _nextActiveItem);
             }
         } else if (_nextActiveItem != null) {
             if (_currentActiveItem.id !== _nextActiveItem.id) {
-                setTimeout(() => this._$scrollElementListener[scrollElementId].next(_nextActiveItem));
+                this._setScrollElementListener(scrollElementId, _nextActiveItem);
             }
         }
     }
@@ -180,11 +193,12 @@ export class ScrollSpyService {
 
     public deleteScrollElement(scrollElementId: string): void {
         if (scrollElementId === 'window') {
-            this._$scrollElementListener[scrollElementId].next(null);
+            this._setScrollElementListener(scrollElementId, null);
         } else {
             this._checkScrollElementExists(scrollElementId);
             delete this._scrollElements[scrollElementId];
             delete this._$scrollElementListener[scrollElementId];
+            delete this._scrollElementListener[scrollElementId];
         }
     }
 

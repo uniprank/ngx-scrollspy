@@ -29,10 +29,10 @@ export class TestCase2Component implements OnInit {
         </ul>
     </nav>
     <div uniScrollElement="overview" direction="horizontal">
-        <section uniScrollSpy="section1" class="section1"></section>
-        <section uniScrollSpy="section2" class="section2"></section>
-        <section uniScrollSpy="section3" class="section3"></section>
-        <section uniScrollSpy="section4" class="section4"></section>
+        <section uniScrollSpy="section1"></section>
+        <section uniScrollSpy="section2"></section>
+        <section uniScrollSpy="section3"></section>
+        <section uniScrollSpy="section4"></section>
     </div>
 </div>
 <div>
@@ -46,10 +46,10 @@ export class TestCase2Component implements OnInit {
         </ul>
     </nav>
     <div uniScrollElement="overview2" direction="horizontal">
-        <section uniScrollSpy="section5" class="section1"></section>
-        <section uniScrollSpy="section6" class="section2"></section>
-        <section uniScrollSpy="section7" class="section3"></section>
-        <section uniScrollSpy="section8" class="section4"></section>
+        <section uniScrollSpy="section5"></section>
+        <section uniScrollSpy="section6"></section>
+        <section uniScrollSpy="section7"></section>
+        <section uniScrollSpy="section8"></section>
     </div>
 </div>
 ```
