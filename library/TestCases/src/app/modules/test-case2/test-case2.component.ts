@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./test-case2.component.scss']
 })
 export class TestCase2Component implements OnInit {
+    public markdown = require('raw-loader!./README.md');
     constructor() {}
 
     ngOnInit() {}

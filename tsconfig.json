@@ -12,7 +12,7 @@
         "importHelpers": true,
         "target": "es5",
         "typeRoots": [
-            "node_modules/@types"
+            "node_modules/@types", "typings.d.ts"
         ],
         "lib": [
             "es2018",
@@ -24,6 +24,9 @@
             ],
             "@uniprank/ngx-scrollspy/*": [
                 "dist/ngx-scrollspy/*"
+            ],
+            "styles-test-cases": [
+                "library/TestCases/src/styles"
             ]
         }
     }

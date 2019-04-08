@@ -130,6 +130,7 @@ Because `ScrollSpyService` is a singleton, you can get any ScrollSpy observable 
 # TODO:
 
 -   Finish unit tests
+-       Safari issue
 
 ## License
 

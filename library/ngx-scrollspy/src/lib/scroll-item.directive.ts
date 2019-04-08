@@ -1,4 +1,4 @@
-import { Directive, Input, Output, EventEmitter, OnDestroy, HostBinding, AfterViewInit } from '@angular/core';
+import { Directive, Input, Output, EventEmitter, OnDestroy, HostBinding, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { ScrollSpyService } from './scroll-spy.service';
@@ -16,13 +16,12 @@ export class ScrollItemDirective implements OnDestroy, AfterViewInit {
 
     private _subscriber: Subscription;
 
-    constructor(private _scrollSpyService: ScrollSpyService) {}
+    constructor(private _scrollSpyService: ScrollSpyService, private _cdr: ChangeDetectorRef) {}
 
     ngOnDestroy(): void {
         if (this._subscriber) {
             this._subscriber.unsubscribe();
         }
-        this._scrollSpyService.deleteItem(this.itemId);
     }
 
     ngAfterViewInit(): void {
@@ -34,7 +33,11 @@ export class ScrollItemDirective implements OnDestroy, AfterViewInit {
             } else {
                 _active = false;
             }
-            setTimeout(() => (this.classActive = _active));
+
+            setTimeout(() => {
+                this.classActive = _active;
+                this._cdr.markForCheck();
+            });
         });
     }
 }

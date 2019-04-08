@@ -1,9 +1,11 @@
+@import '~library/TestCases/src/styles/library';
+
 :host {
     display: block;
     padding: 1rem;
 
     nav {
-        background-color: orange;
+        background-color: $orange;
 
         ul {
             margin: 0;
@@ -15,10 +17,10 @@
                 list-style: none;
                 margin: 0;
                 padding: 1rem;
-                color: white;
+                color: $font-color-invert;
 
                 &.active {
-                    color: orange;
+                    color: $orange;
                     background-color: white;
                 }
             }

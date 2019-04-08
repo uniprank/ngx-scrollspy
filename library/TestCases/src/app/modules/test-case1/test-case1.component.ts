@@ -7,6 +7,7 @@ import { ScrollSpyService } from '@uniprank/ngx-scrollspy';
     styleUrls: ['./test-case1.component.scss']
 })
 export class TestCase1Component implements OnInit {
+    public markdown = require('raw-loader!./README.md');
     constructor(private _scrollSpyService: ScrollSpyService) {}
 
     ngOnInit() {

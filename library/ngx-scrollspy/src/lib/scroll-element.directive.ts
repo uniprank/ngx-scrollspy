@@ -7,7 +7,7 @@ import { ScrollSpyDirective } from './scroll-spy.directive';
 @Directive({
     selector: '[uniScrollElement]'
 })
-export class ScrollElementDirective implements OnInit, AfterViewInit, OnDestroy {
+export class ScrollElementDirective implements OnInit, OnDestroy {
     @Input('uniScrollElement') elementId: string;
     @Input() direction: ScrollDirectionEnum = ScrollDirectionEnum.vertical;
 

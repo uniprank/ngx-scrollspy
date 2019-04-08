@@ -1,7 +1,3 @@
-[![npm version](https://img.shields.io/npm/v/@uniprank/ngx-scrollspy.svg?style=flat)](https://www.npmjs.com/package/@uniprank/ngx-scrollspy)
-[![npm downloads](https://img.shields.io/npm/dm/@uniprank/ngx-scrollspy.svg?style=flat)](https://npmjs.org/package/@uniprank/ngx-scrollspy)
-[![npm license](https://img.shields.io/npm/l/@uniprank/ngx-scrollspy.svg)](https://npmjs.org/package/@uniprank/ngx-scrollspy)
-
 You can use this angular service to spy scroll events from `window` or any other scrollable element.
 
 This library implements an service to collect observables from scroll spy directives. It can be used to create you own components or if you prefer use one of the following directives.
@@ -130,6 +126,7 @@ Because `ScrollSpyService` is a singleton, you can get any ScrollSpy observable 
 # TODO:
 
 -   Finish unit tests
+-       Safari issue
 
 ## License
 

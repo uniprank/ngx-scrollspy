@@ -9,6 +9,7 @@ import { ScrollSpyService } from '@uniprank/ngx-scrollspy';
     styleUrls: ['./test-case3.component.scss']
 })
 export class TestCase3Component implements OnInit, OnDestroy {
+    public markdown = require('raw-loader!./README.md');
     public activeSection: BehaviorSubject<{ id?: string; elementId?: string; nativeElement?: HTMLElement }> = new BehaviorSubject({});
 
     private _subscription: Subscription;
