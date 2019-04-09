@@ -4,6 +4,7 @@
     display: block;
 
     nav {
+        position: -webkit-sticky;
         position: sticky;
         top: 68px;
 

@@ -1,5 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
+
+import * as Stickyfill from 'stickyfilljs';
 
 import { ScrollSpyService } from '@uniprank/ngx-scrollspy';
 
@@ -14,9 +16,10 @@ export class TestCase3Component implements OnInit, OnDestroy {
 
     private _subscription: Subscription;
 
-    constructor(private _scrollSpyService: ScrollSpyService) {}
+    constructor(private _host: ElementRef, private _scrollSpyService: ScrollSpyService) {}
 
     ngOnInit() {
+        Stickyfill.add(this._host.nativeElement.querySelector('nav'));
         // set offset because 2 sticky menu bars width single height of 50px
         this._scrollSpyService.setOffset('window', 100);
         // subscribe to window scroll listener, it is also possible to use an ScrollSpyElement id

@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
+
+import * as Stickyfill from 'stickyfilljs';
 
 @Component({
     selector: 'app-inner-test',
@@ -10,10 +12,11 @@ export class InnerTestComponent implements OnInit {
 
     showSection: Array<{ id: string; name: string; base: boolean }> = [];
 
-    constructor() {}
+    constructor(private _host: ElementRef) {}
 
     ngOnInit() {
         this.showSection = this._generateMenu();
+        Stickyfill.add(this._host.nativeElement.querySelector('.sticky'));
     }
 
     private _generateMenu(): Array<{ id: string; name: string; base: boolean }> {

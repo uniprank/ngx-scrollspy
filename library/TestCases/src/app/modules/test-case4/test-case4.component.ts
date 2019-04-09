@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
+
 import { ScrollSpyService } from '@uniprank/ngx-scrollspy';
 
 @Component({

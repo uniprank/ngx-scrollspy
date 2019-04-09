@@ -5,6 +5,7 @@
     padding: 1rem;
 
     nav {
+        position: -webkit-sticky;
         position: sticky;
         top: 50px;
         background-color: $orange;
@@ -26,6 +27,20 @@
                     background-color: white;
                 }
             }
+        }
+    }
+
+    .template {
+        @include display-grid;
+        @include grid-template-columns(320px 1fr);
+        @include grid-template-rows(auto);
+
+        &>app-inner-test {
+            @include grid-column(1, 2);
+        }
+
+        &>div {
+            @include grid-column(2, 3);
         }
     }
 

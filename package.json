@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "scripts": {
         "ng": "ng",
-        "start": "ng serve --project=TestCases",
+        "start": "ng serve --project=TestCases --host=0.0.0.0",
         "build": "ng build",
         "build:testcases": "ng build --project=TestCases --prod",
         "test": "ng test",
@@ -26,6 +26,7 @@
         "ngx-markdown": "^7.1.5",
         "prismjs": "^1.16.0",
         "rxjs": "~6.3.3",
+        "stickyfilljs": "^2.1.0",
         "tslib": "^1.9.0",
         "zone.js": "~0.8.26"
     },
