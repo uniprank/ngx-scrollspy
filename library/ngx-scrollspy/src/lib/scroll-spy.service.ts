@@ -203,7 +203,8 @@ export class ScrollSpyService {
     }
 
     public deleteItem(itemId: string): void {
-        this._checkItemExists(itemId);
-        delete this._scrollItems[itemId];
+        if (this._scrollItems[itemId] != null) {
+            delete this._scrollItems[itemId];
+        }
     }
 }
