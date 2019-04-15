@@ -1,5 +1,7 @@
-import { Injectable, ElementRef } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, ElementRef, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { BehaviorSubject, Observable, Subject, fromEvent } from 'rxjs';
+import { auditTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { ScrollObjectInterface } from './scroll-object.interface';
 import { ScrollElementInterface } from './scroll-element.interface';
@@ -15,18 +17,28 @@ export class ScrollSpyService {
 
     private _scrollElementListener: { [scrollElementId: string]: ScrollObjectInterface } = {};
 
-    constructor() {
+    private onStopListening = new Subject();
+    private resizeEvents = fromEvent(window, 'resize').pipe(
+        auditTime(300),
+        takeUntil(this.onStopListening)
+    );
+    private scrollEvents = fromEvent(window, 'scroll').pipe(
+        auditTime(10),
+        takeUntil(this.onStopListening)
+    );
+
+    constructor(@Inject(DOCUMENT) private doc: any) {
         this._initScrollElementListener(
             defaultElementId,
-            this._generateScrollElement(
-                defaultElementId,
-                new ElementRef(document.documentElement || document.body),
-                ScrollDirectionEnum.vertical
-            )
+            this._generateScrollElement(defaultElementId, new ElementRef(doc.documentElement || doc.body), ScrollDirectionEnum.vertical)
         );
-        window.addEventListener('scroll', event => {
-            this._windowScroll(event);
-        });
+
+        this.resizeEvents.subscribe(() => this._windowScroll());
+        this.scrollEvents.subscribe(() => this._windowScroll());
+        // window.addEventListener('scroll', event => {
+        //     this._windowScroll();
+        // });
+        this._windowScroll();
     }
 
     private _initScrollElementListener(scrollElementId: string, scrollElement: ScrollElementInterface): void {
@@ -35,7 +47,7 @@ export class ScrollSpyService {
         this._$scrollElementListener[scrollElementId] = new BehaviorSubject(null);
     }
 
-    private _windowScroll($event) {
+    private _windowScroll() {
         this.updateScrollElement(defaultElementId);
     }
 
@@ -177,11 +189,15 @@ export class ScrollSpyService {
             let _active: boolean = false;
             switch (_direction) {
                 case ScrollDirectionEnum.horizontal:
-                    _active = _element.nativeElement.offsetLeft <= nativeElement.scrollLeft + scrollElement.offset;
+                    const _scrollLeft =
+                        scrollElement.id.toLowerCase() === 'window' ? (window && window.pageXOffset) || 0 : nativeElement.scrollLeft;
+                    _active = _element.nativeElement.offsetLeft <= _scrollLeft + scrollElement.offset;
                     break;
 
                 default: {
-                    _active = _element.nativeElement.offsetTop <= nativeElement.scrollTop + scrollElement.offset;
+                    const _scrollTop =
+                        scrollElement.id.toLowerCase() === 'window' ? (window && window.pageYOffset) || 0 : nativeElement.scrollTop;
+                    _active = _element.nativeElement.offsetTop <= _scrollTop + scrollElement.offset;
                 }
             }
             if (_active) {
