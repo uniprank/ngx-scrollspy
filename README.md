@@ -127,6 +127,21 @@ export class YourModule { }
 
 Because `ScrollSpyService` is a singleton, you can get any ScrollSpy observable from anywhere withing your application.
 
+### Parameters
+You can pass optional parameters to the instance when importing the module.
+
+| Parameter | Value   | Description                                                                |
+|-----------|---------|----------------------------------------------------------------------------|
+| lookAhead | boolean | This is set the first item active even if it's not already in the viewport |
+
+```js
+@NgModule({
+    imports: [
+        NgxScrollspyModule.forRoot({lookAhead: true})]
+})
+export class AppModule {}
+```
+
 # TODO:
 
 -   Finish unit tests
