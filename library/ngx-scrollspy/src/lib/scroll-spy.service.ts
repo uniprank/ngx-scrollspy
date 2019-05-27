@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, Inject } from '@angular/core';
+import { Injectable, ElementRef, Inject, InjectionToken, Optional } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BehaviorSubject, Observable, Subject, fromEvent } from 'rxjs';
 import { auditTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -8,6 +8,12 @@ import { ScrollElementInterface } from './scroll-element.interface';
 import { ScrollDirectionEnum } from './scroll-direction.enum';
 
 const defaultElementId = 'window';
+
+export const SPY_CONFIG = new InjectionToken<SpyConfig>(null);
+
+export interface SpyConfig {
+    lookAhead?: boolean;
+}
 
 @Injectable()
 export class ScrollSpyService {
@@ -27,7 +33,9 @@ export class ScrollSpyService {
         takeUntil(this.onStopListening)
     );
 
-    constructor(@Inject(DOCUMENT) private doc: any) {
+    private _lookAhead: boolean;
+
+    constructor(@Inject(SPY_CONFIG) @Optional() config: SpyConfig, @Inject(DOCUMENT) private doc: any) {
         this._initScrollElementListener(
             defaultElementId,
             this._generateScrollElement(defaultElementId, new ElementRef(doc.documentElement || doc.body), ScrollDirectionEnum.vertical)
@@ -35,10 +43,8 @@ export class ScrollSpyService {
 
         this.resizeEvents.subscribe(() => this._windowScroll());
         this.scrollEvents.subscribe(() => this._windowScroll());
-        // window.addEventListener('scroll', event => {
-        //     this._windowScroll();
-        // });
         this._windowScroll();
+        this._lookAhead = config.lookAhead;
     }
 
     private _initScrollElementListener(scrollElementId: string, scrollElement: ScrollElementInterface): void {
@@ -177,6 +183,8 @@ export class ScrollSpyService {
             if (_currentActiveItem.id !== _nextActiveItem.id) {
                 this._setScrollElementListener(scrollElementId, _nextActiveItem);
             }
+        } else if (_nextActiveItem == null && this._lookAhead) {
+            this._setScrollElementListener(scrollElementId, null);
         }
     }
 

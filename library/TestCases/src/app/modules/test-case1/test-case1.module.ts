@@ -10,6 +10,9 @@ import { TestCase1Component } from './test-case1.component';
 
 @NgModule({
     declarations: [TestCase1Component],
-    imports: [CommonModule, MarkdownModule, TestCase1RoutingModule, NgxScrollspyModule.forRoot()]
+    imports: [CommonModule,
+        MarkdownModule,
+        TestCase1RoutingModule,
+        NgxScrollspyModule.forRoot({lookAhead: true})]
 })
 export class TestCase1Module {}
