@@ -109,6 +109,7 @@ export class ScrollSpyService {
     }
 
     private _setDefaultItem(itemId: string, scrollElementId: string): void {
+        if (this._lookAhead) return;
         const _value = this._scrollElementListener[scrollElementId];
         if (_value == null) {
             this._setScrollElementListener(scrollElementId, this._scrollItems[itemId]);
