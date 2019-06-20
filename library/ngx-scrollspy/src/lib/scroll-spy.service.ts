@@ -12,7 +12,16 @@ const defaultElementId = 'window';
 export const SPY_CONFIG = new InjectionToken<SpyConfig>(null);
 
 export interface SpyConfig {
+    /**
+     * @param boolean lookAhead
+     * Set the first scroll item active even when the scroll element has not yet been reached
+     **/
     lookAhead?: boolean;
+    /**
+     * @param boolean activateOnlySetItems
+     * Set the the scroll items active only when the scroll element reached the set offset and is still in the viewport
+     **/
+    activateOnlySetItems?: boolean;
 }
 
 @Injectable()
@@ -33,7 +42,8 @@ export class ScrollSpyService {
         takeUntil(this.onStopListening)
     );
 
-    private _lookAhead: boolean;
+    readonly _lookAhead: boolean;
+    readonly _activateOnlySetItems: boolean;
 
     constructor(@Inject(SPY_CONFIG) @Optional() config: SpyConfig, @Inject(DOCUMENT) private doc: any) {
         this._initScrollElementListener(
@@ -45,6 +55,7 @@ export class ScrollSpyService {
         this.scrollEvents.subscribe(() => this._windowScroll());
         this._windowScroll();
         this._lookAhead = config.lookAhead;
+        this._activateOnlySetItems = config.activateOnlySetItems;
     }
 
     private _initScrollElementListener(scrollElementId: string, scrollElement: ScrollElementInterface): void {
@@ -109,7 +120,9 @@ export class ScrollSpyService {
     }
 
     private _setDefaultItem(itemId: string, scrollElementId: string): void {
-        if (this._lookAhead) return;
+        if (this._lookAhead) {
+            return;
+        }
         const _value = this._scrollElementListener[scrollElementId];
         if (_value == null) {
             this._setScrollElementListener(scrollElementId, this._scrollItems[itemId]);
@@ -206,7 +219,14 @@ export class ScrollSpyService {
                 default: {
                     const _scrollTop =
                         scrollElement.id.toLowerCase() === 'window' ? (window && window.pageYOffset) || 0 : nativeElement.scrollTop;
-                    _active = _element.nativeElement.offsetTop <= _scrollTop + scrollElement.offset;
+                    if (this._activateOnlySetItems) {
+                        _active =
+                            _element.nativeElement.offsetTop < _scrollTop + scrollElement.offset
+                            &&
+                            _element.nativeElement.offsetTop + _element.nativeElement.offsetHeight > _scrollTop + scrollElement.offset;
+                    } else {
+                        _active = _element.nativeElement.offsetTop <= _scrollTop + scrollElement.offset;
+                    }
                 }
             }
             if (_active) {
