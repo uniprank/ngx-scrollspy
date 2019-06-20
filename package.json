@@ -6,6 +6,7 @@
         "start": "ng serve --project=TestCases --host=0.0.0.0",
         "build": "ng build",
         "build:testcases": "ng build --project=TestCases --prod",
+        "build:development": "ng build --watch",
         "test": "ng test",
         "lint": "ng lint",
         "publish": "cd dist/ngx-scrollspy && npm publish --access public",
