@@ -1,10 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ScrollSpyService } from './scroll-spy.service';
+import { NgxScrollspyModule } from './ngx-scrollspy.module';
 
 describe('ScrollSpyService', () => {
     beforeEach(() => {
-        TestBed.configureTestingModule({ providers: [ScrollSpyService] });
+        TestBed.configureTestingModule({
+            imports: [NgxScrollspyModule.forRoot()],
+            providers: [ScrollSpyService]
+        });
     });
 
     it('should be created', () => {
