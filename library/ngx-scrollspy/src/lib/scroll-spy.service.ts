@@ -42,10 +42,10 @@ export class ScrollSpyService {
         takeUntil(this.onStopListening)
     );
 
-    readonly _lookAhead: boolean;
-    readonly _activateOnlySetItems: boolean;
+    readonly _lookAhead?: boolean = false;
+    readonly _activateOnlySetItems?: boolean = false;
 
-    constructor(@Inject(SPY_CONFIG) @Optional() config: SpyConfig, @Inject(DOCUMENT) private doc: any) {
+    constructor(@Inject(DOCUMENT) private doc: any, @Inject(SPY_CONFIG) @Optional() config?: SpyConfig) {
         this._initScrollElementListener(
             defaultElementId,
             this._generateScrollElement(defaultElementId, new ElementRef(doc.documentElement || doc.body), ScrollDirectionEnum.vertical)
@@ -54,8 +54,10 @@ export class ScrollSpyService {
         this.resizeEvents.subscribe(() => this._windowScroll());
         this.scrollEvents.subscribe(() => this._windowScroll());
         this._windowScroll();
-        this._lookAhead = config.lookAhead;
-        this._activateOnlySetItems = config.activateOnlySetItems;
+        if (config !== null) {
+            this._lookAhead = config.lookAhead;
+            this._activateOnlySetItems = config.activateOnlySetItems;
+        }
     }
 
     private _initScrollElementListener(scrollElementId: string, scrollElement: ScrollElementInterface): void {
