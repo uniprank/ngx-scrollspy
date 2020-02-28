@@ -7,11 +7,12 @@ import { ScrollSpyDirective } from './scroll-spy.directive';
 @Directive({
     selector: '[uniScrollElement]'
 })
-export class ScrollElementDirective implements OnInit, OnDestroy {
+export class ScrollElementDirective implements OnInit, AfterViewInit, OnDestroy {
     @Input('uniScrollElement') elementId: string;
     @Input() direction: ScrollDirectionEnum = ScrollDirectionEnum.vertical;
 
-    @ContentChildren(ScrollSpyDirective, { descendants: true }) private _scrollSpyElements: QueryList<ScrollSpyDirective>;
+    @ContentChildren(ScrollSpyDirective, { descendants: true })
+    private _scrollSpyElements: QueryList<ScrollSpyDirective>;
 
     @HostListener('scroll', ['$event'])
     onScroll($event) {
@@ -22,12 +23,16 @@ export class ScrollElementDirective implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this._scrollSpyService.setScrollElement(this.elementId, this._el, this.direction);
-        this._el.nativeElement.setAttribute('id', this.elementId);
+        if (this._scrollSpyService.attributeType === 'id') {
+            this._el.nativeElement.setAttribute('id', this.elementId);
+        } else {
+            this._el.nativeElement.setAttribute('data-id', this.elementId);
+        }
     }
 
     ngAfterViewInit(): void {
-        let _scrollSpyElements: ScrollSpyDirective[] = this._scrollSpyElements.toArray();
-        _scrollSpyElements.forEach(element => {
+        const _scrollSpyElements: ScrollSpyDirective[] = this._scrollSpyElements.toArray();
+        _scrollSpyElements.forEach((element) => {
             this._scrollSpyService.changeScrollElement(element.itemId, element.scrollElement, this.elementId);
         });
     }

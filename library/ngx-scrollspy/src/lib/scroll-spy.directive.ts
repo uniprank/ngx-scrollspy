@@ -7,10 +7,10 @@ import { ScrollSpyService } from './scroll-spy.service';
     selector: '[uniScrollSpy]'
 })
 export class ScrollSpyDirective implements AfterViewInit, OnDestroy {
-    @HostBinding('class.active') classActive: boolean = false;
+    @HostBinding('class.active') classActive = false;
 
     @Input('uniScrollSpy') itemId: string;
-    @Input() scrollElement: string = 'window';
+    @Input() scrollElement = 'window';
 
     private _subscriber: Subscription;
 
@@ -24,7 +24,7 @@ export class ScrollSpyDirective implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this._subscriber = this._scrollSpyService.observe(this.scrollElement).subscribe(element => {
+        this._subscriber = this._scrollSpyService.observe(this.scrollElement).subscribe((element) => {
             if (element != null) {
                 const _active = element.id === this.itemId;
                 setTimeout(() => {
@@ -34,6 +34,12 @@ export class ScrollSpyDirective implements AfterViewInit, OnDestroy {
             }
         });
         this._scrollSpyService.setItem(this.itemId, this._el, this.scrollElement);
-        this._el.nativeElement.setAttribute('id', this.itemId);
+        switch (this._scrollSpyService.attributeType) {
+            case 'data-id':
+                this._el.nativeElement.setAttribute('data-id', this.itemId);
+                break;
+            default:
+                this._el.nativeElement.setAttribute('id', this.itemId);
+        }
     }
 }

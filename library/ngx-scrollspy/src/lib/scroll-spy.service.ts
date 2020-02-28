@@ -1,7 +1,7 @@
 import { Injectable, ElementRef, Inject, InjectionToken, Optional } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BehaviorSubject, Observable, Subject, fromEvent } from 'rxjs';
-import { auditTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { auditTime, takeUntil } from 'rxjs/operators';
 
 import { ScrollObjectInterface } from './scroll-object.interface';
 import { ScrollElementInterface } from './scroll-element.interface';
@@ -15,13 +15,18 @@ export interface SpyConfig {
     /**
      * @param boolean lookAhead
      * Set the first scroll item active even when the scroll element has not yet been reached
-     **/
+     */
     lookAhead?: boolean;
     /**
      * @param boolean activateOnlySetItems
      * Set the the scroll items active only when the scroll element reached the set offset and is still in the viewport
-     **/
+     */
     activateOnlySetItems?: boolean;
+    /**
+     * @param boolean activateOnlySetItems
+     * Set the the scroll items active only when the scroll element reached the set offset and is still in the viewport
+     */
+    attributeType?: 'id' | 'data-id';
 }
 
 @Injectable()
@@ -33,17 +38,16 @@ export class ScrollSpyService {
     private _scrollElementListener: { [scrollElementId: string]: ScrollObjectInterface } = {};
 
     private onStopListening = new Subject();
-    private resizeEvents = fromEvent(window, 'resize').pipe(
-        auditTime(300),
-        takeUntil(this.onStopListening)
-    );
-    private scrollEvents = fromEvent(window, 'scroll').pipe(
-        auditTime(10),
-        takeUntil(this.onStopListening)
-    );
+    private resizeEvents = fromEvent(window, 'resize').pipe(auditTime(300), takeUntil(this.onStopListening));
+    private scrollEvents = fromEvent(window, 'scroll').pipe(auditTime(10), takeUntil(this.onStopListening));
 
     readonly _lookAhead?: boolean = false;
     readonly _activateOnlySetItems?: boolean = false;
+    readonly _attributeType?: 'id' | 'data-id' = 'id';
+
+    public get attributeType(): 'id' | 'data-id' {
+        return this._attributeType;
+    }
 
     constructor(@Inject(DOCUMENT) private doc: any, @Inject(SPY_CONFIG) @Optional() config?: SpyConfig) {
         this._initScrollElementListener(
@@ -57,6 +61,7 @@ export class ScrollSpyService {
         if (config !== null) {
             this._lookAhead = config.lookAhead;
             this._activateOnlySetItems = config.activateOnlySetItems;
+            this._attributeType = config.attributeType;
         }
     }
 
@@ -156,10 +161,12 @@ export class ScrollSpyService {
 
     private _getElementItems(scrollElementId: string): Array<ScrollObjectInterface> {
         const _items = [];
-        for (let key in this._scrollItems) {
-            const value = this._scrollItems[key];
-            if (value.scrollElementId === scrollElementId) {
-                _items.push(value);
+        for (const key in this._scrollItems) {
+            if (this._scrollItems.hasOwnProperty(key)) {
+                const value = this._scrollItems[key];
+                if (value.scrollElementId === scrollElementId) {
+                    _items.push(value);
+                }
             }
         }
         return _items;
@@ -209,8 +216,8 @@ export class ScrollSpyService {
         let _scrollObject = null;
 
         const nativeElement = scrollElement.elementRef.nativeElement;
-        listOfElements.forEach(_element => {
-            let _active: boolean = false;
+        listOfElements.forEach((_element) => {
+            let _active = false;
             switch (_direction) {
                 case ScrollDirectionEnum.horizontal:
                     const _scrollLeft =
@@ -223,8 +230,7 @@ export class ScrollSpyService {
                         scrollElement.id.toLowerCase() === 'window' ? (window && window.pageYOffset) || 0 : nativeElement.scrollTop;
                     if (this._activateOnlySetItems) {
                         _active =
-                            _element.nativeElement.offsetTop < _scrollTop + scrollElement.offset
-                            &&
+                            _element.nativeElement.offsetTop < _scrollTop + scrollElement.offset &&
                             _element.nativeElement.offsetTop + _element.nativeElement.offsetHeight > _scrollTop + scrollElement.offset;
                     } else {
                         _active = _element.nativeElement.offsetTop <= _scrollTop + scrollElement.offset;

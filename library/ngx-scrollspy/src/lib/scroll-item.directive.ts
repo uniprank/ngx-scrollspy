@@ -7,10 +7,10 @@ import { ScrollSpyService } from './scroll-spy.service';
     selector: '[uniScrollItem]'
 })
 export class ScrollItemDirective implements OnDestroy, AfterViewInit {
-    @HostBinding('class.active') classActive: boolean = false;
+    @HostBinding('class.active') classActive = false;
 
     @Input('uniScrollItem') itemId: string;
-    @Input() scrollElement: string = 'window';
+    @Input() scrollElement = 'window';
 
     @Output() activeEvent: EventEmitter<boolean> = new EventEmitter();
 
@@ -25,7 +25,7 @@ export class ScrollItemDirective implements OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this._subscriber = this._scrollSpyService.observe(this.scrollElement).subscribe(element => {
+        this._subscriber = this._scrollSpyService.observe(this.scrollElement).subscribe((element) => {
             let _active;
             if (element != null) {
                 _active = element.id === this.itemId;
