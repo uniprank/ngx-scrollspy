@@ -10,7 +10,11 @@
         "test": "ng test",
         "lint": "ng lint",
         "publish": "cd dist/ngx-scrollspy && npm publish --access public",
-        "e2e": "ng e2e"
+        "e2e": "ng e2e",
+        "test:changelog": "changelog -M",
+        "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags",
+        "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags",
+        "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags"
     },
     "license": "MIT",
     "private": false,
@@ -42,6 +46,7 @@
         "@types/node": "^8.9.4",
         "codelyzer": "~4.5.0",
         "fstream": "^1.0.12",
+        "generate-changelog": "^1.8.0",
         "jasmine-core": "~2.99.1",
         "jasmine-spec-reporter": "~4.2.1",
         "karma": "~4.0.0",
