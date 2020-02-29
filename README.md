@@ -4,7 +4,7 @@
 
 You can use this angular service to spy scroll events from `window` or any other scrollable element.
 
-This library implements an service to collect observables from scroll spy directives. It can be used to create you own components or if you prefer use one of the following directives.
+This library implements a service to collect observables from scroll spy directives. It can be used to create your own components or if you prefer use one of the following directives.
 
 See Examples here [Example](https://uniprank.github.io/ngx-scrollspy/test-cases)
 
@@ -27,7 +27,7 @@ System.config({
 ```
 
 Finally, you can use ngx-scrollspy in your Angular project (NOT AngularJS).
-It is recommended to instantiate `ScrollSpyService` in the bootstrap of your application and to never add it to the "providers" property of your components, this way you will keep it as a singleton.
+It is recommended to instantiate `ScrollSpyService` in the bootstrap of your application and do never add it to the "providers" property of your components, this way you will keep it as a singleton.
 If you add it to the "providers" property of a component it will instantiate a new instance of the service that won't be initialized.
 
 ```js
