@@ -52,15 +52,20 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "baseHref": "/ngx-scrollspy/test-cases/",
-                        "outputPath": "docs/test-cases",
+                        "baseHref": "/ngx-scrollspy/",
+                        "outputPath": "docs",
                         "index": "library/TestCases/src/index.html",
                         "main": "library/TestCases/src/main.ts",
                         "polyfills": "library/TestCases/src/polyfills.ts",
                         "tsConfig": "library/TestCases/tsconfig.app.json",
                         "assets": [
                             "library/TestCases/src/favicon.ico",
-                            "library/TestCases/src/assets"
+                            "library/TestCases/src/assets",
+                            {
+                                "glob": "404.html",
+                                "input": "library/TestCases/src/",
+                                "output": "./"
+                            }
                         ],
                         "styles": [
                             "library/TestCases/src/styles.scss",
