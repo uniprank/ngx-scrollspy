@@ -1,3 +1,5 @@
+[![travis build](https://img.shields.io/travis/uniprank/ngx-scrollspy?label=Travis%3Abuild&style=flat-square)](https://travis-ci.org/uniprank/ngx-scrollspy)
+
 You can use this angular service to spy scroll events from `window` or any other scrollable element.
 
 This library implements an service to collect observables from scroll spy directives. It can be used to create you own components or if you prefer use one of the following directives.
@@ -16,9 +18,9 @@ If you use SystemJS to load your files, you might have to update your config wit
 
 ```js
 System.config({
-    packages: {
-        '@uniprank/ngx-scrollspy': { defaultExtension: 'js' }
-    }
+  packages: {
+    '@uniprank/ngx-scrollspy': { defaultExtension: 'js' }
+  }
 });
 ```
 
@@ -33,9 +35,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ScrollSpyModule } from '@uniprank/ngx-scrollspy';
 
 @NgModule({
-    imports: [BrowserModule, ScrollSpyModule.forRoot()],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [BrowserModule, ScrollSpyModule.forRoot()],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
 ```
@@ -125,7 +127,7 @@ Because `ScrollSpyService` is a singleton, you can get any ScrollSpy observable 
 
 # TODO:
 
--   Finish unit tests
+- Finish unit tests
 
 ## License
 

@@ -1,6 +1,7 @@
-[![npm version](https://img.shields.io/npm/v/@uniprank/ngx-scrollspy.svg?style=flat)](https://www.npmjs.com/package/@uniprank/ngx-scrollspy)
-[![npm downloads](https://img.shields.io/npm/dm/@uniprank/ngx-scrollspy.svg?style=flat)](https://npmjs.org/package/@uniprank/ngx-scrollspy)
-[![npm license](https://img.shields.io/npm/l/@uniprank/ngx-scrollspy.svg)](https://npmjs.org/package/@uniprank/ngx-scrollspy)
+[![npm version](https://img.shields.io/npm/v/@uniprank/ngx-scrollspy.svg?style=flat-square)](https://www.npmjs.com/package/@uniprank/ngx-scrollspy)
+[![npm downloads](https://img.shields.io/npm/dm/@uniprank/ngx-scrollspy.svg?style=flat-square)](https://npmjs.org/package/@uniprank/ngx-scrollspy)
+[![npm license](https://img.shields.io/npm/l/@uniprank/ngx-scrollspy.svg?style=flat-square)](https://npmjs.org/package/@uniprank/ngx-scrollspy)
+[![travis build](https://img.shields.io/travis/uniprank/ngx-scrollspy?label=Travis%3Abuild&style=flat-square)](https://travis-ci.org/uniprank/ngx-scrollspy)
 
 You can use this angular service to spy scroll events from `window` or any other scrollable element.
 
@@ -20,9 +21,9 @@ If you use SystemJS to load your files, you might have to update your config wit
 
 ```js
 System.config({
-    packages: {
-        '@uniprank/ngx-scrollspy': { defaultExtension: 'js' }
-    }
+  packages: {
+    '@uniprank/ngx-scrollspy': { defaultExtension: 'js' }
+  }
 });
 ```
 
@@ -37,9 +38,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ScrollSpyModule } from '@uniprank/ngx-scrollspy';
 
 @NgModule({
-    imports: [BrowserModule, ScrollSpyModule.forRoot()],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [BrowserModule, ScrollSpyModule.forRoot()],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
 ```
@@ -137,14 +138,14 @@ You can pass optional parameters to the instance when importing the module.
 
 ```js
 @NgModule({
-    imports: [NgxScrollspyModule.forRoot({ lookAhead: true })]
+  imports: [NgxScrollspyModule.forRoot({ lookAhead: true })]
 })
 export class AppModule {}
 ```
 
 # TODO:
 
--   Finish unit tests
+- Finish unit tests
 
 ## License
 
