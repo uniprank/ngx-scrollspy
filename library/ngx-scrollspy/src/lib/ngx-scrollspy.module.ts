@@ -17,7 +17,7 @@ const providers: Provider[] = [ScrollSpyService];
     exports: [...directives, ...components]
 })
 export class NgxScrollspyModule {
-    public static forRoot(parameters: SpyConfig = { lookAhead: false }): ModuleWithProviders {
+    public static forRoot(parameters: SpyConfig = { lookAhead: false }): ModuleWithProviders<NgxScrollspyModule> {
         return {
             ngModule: NgxScrollspyModule,
             providers: [...providers, { provide: SPY_CONFIG, useValue: parameters }]

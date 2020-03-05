@@ -15,7 +15,12 @@
                         "tsConfig": "library/ngx-scrollspy/tsconfig.lib.json",
                         "project": "library/ngx-scrollspy/ng-package.json"
                     }
-                },
+                ,          "configurations": {
+            "production": {
+              "tsConfig": "library/ngx-scrollspy/tsconfig.lib.prod.json"
+            }
+          }
+},
                 "test": {
                     "builder": "@angular-devkit/build-angular:karma",
                     "options": {
@@ -52,6 +57,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
+            "aot": true,
                         "baseHref": "/ngx-scrollspy/",
                         "outputPath": "docs",
                         "index": "library/TestCases/src/index.html",
@@ -94,11 +100,17 @@
                             "extractLicenses": true,
                             "vendorChunk": false,
                             "buildOptimizer": true,
-                            "budgets": [{
-                                "type": "initial",
-                                "maximumWarning": "2mb",
-                                "maximumError": "5mb"
-                            }]
+                            "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ]
                         }
                     }
                 },
