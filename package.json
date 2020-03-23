@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --project=TestCases --host=0.0.0.0",
-    "build": "ng build",
+    "build": "ng build --prod",
     "build:testcases": "ng build --project=TestCases --prod",
     "build:development": "ng build --watch",
     "test": "ng test ngx-scrollspy --watch=false --code-coverage",

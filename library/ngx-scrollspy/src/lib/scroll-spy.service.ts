@@ -11,8 +11,6 @@ const defaultElementId = 'window';
 
 export const SPY_CONFIG = new InjectionToken<SpyConfig>(null);
 
-type DATA_OR_ID = 'id' | 'data-id';
-
 export interface SpyConfig {
   /**
    * @param boolean lookAhead
@@ -28,7 +26,7 @@ export interface SpyConfig {
    * @param boolean activateOnlySetItems
    * Set the the scroll items active only when the scroll element reached the set offset and is still in the viewport
    */
-  attributeType?: DATA_OR_ID;
+  attributeType?: 'id' | 'data-id';
 }
 
 @Injectable()
@@ -45,9 +43,9 @@ export class ScrollSpyService {
 
   readonly _lookAhead: boolean;
   readonly _activateOnlySetItems: boolean;
-  readonly _attributeType: DATA_OR_ID;
+  readonly _attributeType: 'id' | 'data-id';
 
-  public get attributeType(): DATA_OR_ID {
+  public get attributeType(): 'id' | 'data-id' {
     return this._attributeType;
   }
 
