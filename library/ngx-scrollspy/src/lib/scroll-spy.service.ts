@@ -41,13 +41,10 @@ export class ScrollSpyService {
   private _resizeEvents = fromEvent(window, 'resize').pipe(auditTime(300), takeUntil(this._onStopListening));
   private _scrollEvents = fromEvent(window, 'scroll').pipe(auditTime(10), takeUntil(this._onStopListening));
 
-  readonly _lookAhead: boolean;
-  readonly _activateOnlySetItems: boolean;
-  readonly _attributeType: 'id' | 'data-id';
+  private _lookAhead: boolean;
+  private _activateOnlySetItems: boolean;
 
-  public get attributeType(): 'id' | 'data-id' {
-    return this._attributeType;
-  }
+  readonly attributeType: 'id' | 'data-id';
 
   constructor(@Inject(DOCUMENT) private doc: any, @Inject(SPY_CONFIG) @Optional() config?: SpyConfig) {
     this._initScrollElementListener(
@@ -61,11 +58,11 @@ export class ScrollSpyService {
     if (config !== null) {
       this._lookAhead = config.lookAhead;
       this._activateOnlySetItems = config.activateOnlySetItems;
-      this._attributeType = config.attributeType;
+      this.attributeType = config.attributeType;
     } else {
       this._lookAhead = false;
       this._activateOnlySetItems = false;
-      this._attributeType = 'id';
+      this.attributeType = 'id';
     }
   }
 
