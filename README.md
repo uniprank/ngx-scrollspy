@@ -35,10 +35,10 @@ If you add it to the "providers" property of a component it will instantiate a n
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { ScrollSpyModule } from '@uniprank/ngx-scrollspy';
+import { NgxScrollspyModule } from '@uniprank/ngx-scrollspy';
 
 @NgModule({
-  imports: [BrowserModule, ScrollSpyModule.forRoot()],
+  imports: [BrowserModule, NgxScrollspyModule.forRoot()],
   declarations: [AppComponent],
   bootstrap: [AppComponent]
 })
@@ -55,7 +55,7 @@ Use `ScrollSpyDirective` to spy on window as default or set also element to spy 
 import { NgModule, Component, Injectable, AfterViewInit } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { ScrollSpyModule, ScrollSpyService, ScrollObjectInterface } from '@uniprank/ngx-scrollspy';
+import { NgxScrollspyModule, ScrollSpyService, ScrollObjectInterface } from '@uniprank/ngx-scrollspy';
 
 @Injectable()
 @Component({
@@ -91,7 +91,7 @@ This unique id is called elementID and you need this elementID to connect your `
 
 ```js
 import { NgModule, Component, Injectable, AfterViewInit } from '@angular/core';
-import { ScrollSpyModule, ScrollSpyService, ScrollObjectInterface } from '@uniprank/ngx-scrollspy';
+import { NgxScrollspyModule, ScrollSpyService, ScrollObjectInterface } from '@uniprank/ngx-scrollspy';
 
 @Injectable()
 @Component({
@@ -116,7 +116,7 @@ export class YourComponent implements AfterViewInit {
 
 @NgModule({
   imports: [
-		ScrollSpyModule
+		NgxScrollspyModule
   ],
   declarations: [
   	AppComponent
