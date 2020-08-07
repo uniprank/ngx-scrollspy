@@ -31,7 +31,7 @@
     "@angular/router": "~9.0.5",
     "core-js": "^2.5.4",
     "ngx-markdown": "^9.0.0",
-    "prismjs": "^1.16.0",
+    "prismjs": "^1.21.0",
     "rxjs": "~6.5.4",
     "stickyfilljs": "^2.1.0",
     "tslib": "^1.10.0",
