@@ -1,0 +1,34 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "./",
+    "downlevelIteration": true,
+        "outDir": "./dist/out-tsc",
+        "sourceMap": true,
+        "declaration": false,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "es2015",
+        "typeRoots": [
+            "node_modules/@types", "typings.d.ts"
+        ],
+        "lib": [
+            "es2018",
+            "dom"
+        ],
+        "paths": {
+            "@uniprank/ngx-scrollspy": [
+                "dist/ngx-scrollspy"
+            ],
+            "@uniprank/ngx-scrollspy/*": [
+                "dist/ngx-scrollspy/*"
+            ],
+            "styles-test-cases": [
+                "library/TestCases/src/styles"
+            ]
+        }
+    }
+}
