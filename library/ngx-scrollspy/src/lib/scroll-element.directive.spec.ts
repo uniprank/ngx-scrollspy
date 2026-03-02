@@ -1,40 +1,40 @@
 import { Component } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgxScrollspyModule } from './ngx-scrollspy.module';
+import { ScrollElementDirective } from './scroll-element.directive';
+import { SPY_CONFIG } from './scroll-spy.service';
 
 @Component({
-    template: `
-        <div uniScrollElement>Hello world!</div>
-    `
+  standalone: true,
+  imports: [ScrollElementDirective],
+  template: ` <div [uniScrollElement]="'test-element'">Hello world!</div> `
 })
 class TestComponent {}
 
 describe('ScrollElementDirective', () => {
-    let component: TestComponent;
-    let fixture: ComponentFixture<TestComponent>;
+  let component: TestComponent;
+  let fixture: ComponentFixture<TestComponent>;
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            imports: [NgxScrollspyModule.forRoot()],
-            declarations: [TestComponent]
-        }).compileComponents();
-    }));
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [TestComponent],
+      providers: [{ provide: SPY_CONFIG, useValue: { lookAhead: false } }]
+    }).compileComponents();
+  }));
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(TestComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TestComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-    it('should create component only with type and data', () => {
-        const compiled: HTMLElement = fixture.debugElement.nativeElement;
-        const div = compiled.querySelector('div');
-        console.log(div);
-        expect(true).toBeTruthy();
-    });
+  it('should create component only with type and data', () => {
+    const compiled: HTMLElement = fixture.debugElement.nativeElement;
+    const div = compiled.querySelector('div');
+    expect(div).toBeTruthy();
+  });
 });

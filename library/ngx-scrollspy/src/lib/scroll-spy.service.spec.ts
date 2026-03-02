@@ -1,18 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ScrollSpyService } from './scroll-spy.service';
-import { NgxScrollspyModule } from './ngx-scrollspy.module';
+import { ScrollSpyService, SPY_CONFIG } from './scroll-spy.service';
 
 describe('ScrollSpyService', () => {
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [NgxScrollspyModule.forRoot()],
-            providers: [ScrollSpyService]
-        });
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [{ provide: SPY_CONFIG, useValue: { lookAhead: false } }]
     });
+  });
 
-    it('should be created', () => {
-        const service: ScrollSpyService = TestBed.get(ScrollSpyService);
-        expect(service).toBeTruthy();
-    });
+  it('should be created', () => {
+    const service = TestBed.inject(ScrollSpyService);
+    expect(service).toBeTruthy();
+  });
 });

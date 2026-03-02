@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, Inject, InjectionToken, Optional } from '@angular/core';
+import { Injectable, ElementRef, InjectionToken, inject, DestroyRef } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BehaviorSubject, Observable, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { ScrollDirectionEnum } from './scroll-direction.enum';
 
 const defaultElementId = 'window';
 
-export const SPY_CONFIG = new InjectionToken<SpyConfig>(null);
+export const SPY_CONFIG = new InjectionToken<SpyConfig>('SPY_CONFIG');
 
 export interface SpyConfig {
   /**
@@ -19,46 +19,62 @@ export interface SpyConfig {
   lookAhead?: boolean;
   /**
    * @param boolean activateOnlySetItems
-   * Set the the scroll items active only when the scroll element reached the set offset and is still in the viewport
+   * Set the scroll items active only when the scroll element reached the set offset and is still in the viewport
    */
   activateOnlySetItems?: boolean;
   /**
-   * @param boolean activateOnlySetItems
-   * Set the the scroll items active only when the scroll element reached the set offset and is still in the viewport
+   * @param attributeType
+   * Set the scroll items active only when the scroll element reached the set offset and is still in the viewport
    */
   attributeType?: 'id' | 'data-id';
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ScrollSpyService {
-  private _scrollItems: { [itemId: string]: ScrollObjectInterface } = {};
-  private _scrollElements: { [scrollElementId: string]: ScrollElementInterface } = {};
-  private _$scrollElementListener: { [scrollElementId: string]: BehaviorSubject<ScrollObjectInterface> } = {};
+  private readonly _doc = inject(DOCUMENT);
+  private readonly _config = inject(SPY_CONFIG, { optional: true });
 
-  private _scrollElementListener: { [scrollElementId: string]: ScrollObjectInterface } = {};
+  private _scrollItems: Record<string, ScrollObjectInterface> = {};
+  private _scrollElements: Record<string, ScrollElementInterface> = {};
+  private _$scrollElementListener: Record<string, BehaviorSubject<ScrollObjectInterface | null>> = {};
 
-  private _onStopListening = new Subject();
-  private _resizeEvents = fromEvent(window, 'resize').pipe(auditTime(300), takeUntil(this._onStopListening));
-  private _scrollEvents = fromEvent(window, 'scroll').pipe(auditTime(10), takeUntil(this._onStopListening));
+  private _scrollElementListener: Record<string, ScrollObjectInterface | null> = {};
+
+  private _onStopListening = new Subject<void>();
+  private _window: Window | null;
 
   private _lookAhead: boolean;
   private _activateOnlySetItems: boolean;
 
   readonly attributeType: 'id' | 'data-id';
 
-  constructor(@Inject(DOCUMENT) private doc: any, @Inject(SPY_CONFIG) @Optional() config?: SpyConfig) {
+  constructor() {
+    this._window = this._doc.defaultView;
+
     this._initScrollElementListener(
       defaultElementId,
-      this._generateScrollElement(defaultElementId, new ElementRef(doc.documentElement || doc.body), ScrollDirectionEnum.vertical)
+      this._generateScrollElement(
+        defaultElementId,
+        new ElementRef(this._doc.documentElement || this._doc.body),
+        ScrollDirectionEnum.vertical
+      )
     );
 
-    this._resizeEvents.subscribe(() => this._windowScroll());
-    this._scrollEvents.subscribe(() => this._windowScroll());
+    if (this._window) {
+      fromEvent(this._window, 'resize')
+        .pipe(auditTime(300), takeUntil(this._onStopListening))
+        .subscribe(() => this._windowScroll());
+      fromEvent(this._window, 'scroll')
+        .pipe(auditTime(10), takeUntil(this._onStopListening))
+        .subscribe(() => this._windowScroll());
+    }
+
     this._windowScroll();
-    if (config !== null) {
-      this._lookAhead = config.lookAhead;
-      this._activateOnlySetItems = config.activateOnlySetItems;
-      this.attributeType = config.attributeType;
+
+    if (this._config != null) {
+      this._lookAhead = this._config.lookAhead ?? false;
+      this._activateOnlySetItems = this._config.activateOnlySetItems ?? false;
+      this.attributeType = this._config.attributeType ?? 'id';
     } else {
       this._lookAhead = false;
       this._activateOnlySetItems = false;
@@ -69,7 +85,7 @@ export class ScrollSpyService {
   private _initScrollElementListener(scrollElementId: string, scrollElement: ScrollElementInterface): void {
     this._scrollElements[scrollElementId] = scrollElement;
     this._scrollElementListener[scrollElementId] = null;
-    this._$scrollElementListener[scrollElementId] = new BehaviorSubject(null);
+    this._$scrollElementListener[scrollElementId] = new BehaviorSubject<ScrollObjectInterface | null>(null);
   }
 
   private _windowScroll() {
@@ -80,7 +96,7 @@ export class ScrollSpyService {
     scrollElementId: string,
     elementRef: ElementRef,
     direction: ScrollDirectionEnum,
-    offset: number = 0
+    offset = 0
   ): ScrollElementInterface {
     return {
       id: scrollElementId,
@@ -95,7 +111,7 @@ export class ScrollSpyService {
     this._scrollElements[scrollElementId].offset = offset;
   }
 
-  public setScrollElement(scrollElementId: string, elementRef: ElementRef, direction: ScrollDirectionEnum, offset: number = 0): void {
+  public setScrollElement(scrollElementId: string, elementRef: ElementRef, direction: ScrollDirectionEnum, offset = 0): void {
     this._checkScrollElementNotExists(scrollElementId);
     this._initScrollElementListener(scrollElementId, this._generateScrollElement(scrollElementId, elementRef, direction, offset));
   }
@@ -137,7 +153,7 @@ export class ScrollSpyService {
     }
   }
 
-  private _setScrollElementListener(scrollElementId: string, scrollObject: ScrollObjectInterface): void {
+  private _setScrollElementListener(scrollElementId: string, scrollObject: ScrollObjectInterface | null): void {
     this._scrollElementListener[scrollElementId] = scrollObject;
     setTimeout(() => this._$scrollElementListener[scrollElementId].next(scrollObject));
   }
@@ -160,10 +176,10 @@ export class ScrollSpyService {
     }
   }
 
-  private _getElementItems(scrollElementId: string): Array<ScrollObjectInterface> {
-    const _items = [];
+  private _getElementItems(scrollElementId: string): ScrollObjectInterface[] {
+    const _items: ScrollObjectInterface[] = [];
     for (const key in this._scrollItems) {
-      if (this._scrollItems.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(this._scrollItems, key)) {
         const value = this._scrollItems[key];
         if (value.scrollElementId === scrollElementId) {
           _items.push(value);
@@ -179,7 +195,7 @@ export class ScrollSpyService {
     }
   }
 
-  public observe(scrollElementId: string = defaultElementId): Observable<ScrollObjectInterface> {
+  public observe(scrollElementId: string = defaultElementId): Observable<ScrollObjectInterface | null> {
     this._checkScrollElementExists(scrollElementId);
     return this._$scrollElementListener[scrollElementId].asObservable();
   }
@@ -212,21 +228,21 @@ export class ScrollSpyService {
     }
   }
 
-  private _getActiveItem(scrollElement: ScrollElementInterface, listOfElements: Array<ScrollObjectInterface>): ScrollObjectInterface {
+  private _getActiveItem(scrollElement: ScrollElementInterface, listOfElements: ScrollObjectInterface[]): ScrollObjectInterface | null {
     const _direction = scrollElement.direction;
-    let _scrollObject = null;
+    let _scrollObject: ScrollObjectInterface | null = null;
 
     const nativeElement = scrollElement.elementRef.nativeElement;
     listOfElements.forEach((_element) => {
       let _active = false;
       switch (_direction) {
-        case ScrollDirectionEnum.horizontal:
-          const _scrollLeft = scrollElement.id.toLowerCase() === 'window' ? (window && window.pageXOffset) || 0 : nativeElement.scrollLeft;
+        case ScrollDirectionEnum.horizontal: {
+          const _scrollLeft = scrollElement.id.toLowerCase() === 'window' ? (this._window?.pageXOffset ?? 0) : nativeElement.scrollLeft;
           _active = _element.nativeElement.offsetLeft <= _scrollLeft + scrollElement.offset;
           break;
-
+        }
         default: {
-          const _scrollTop = scrollElement.id.toLowerCase() === 'window' ? (window && window.pageYOffset) || 0 : nativeElement.scrollTop;
+          const _scrollTop = scrollElement.id.toLowerCase() === 'window' ? (this._window?.scrollY ?? 0) : nativeElement.scrollTop;
           if (this._activateOnlySetItems) {
             _active =
               _element.nativeElement.offsetTop < _scrollTop + scrollElement.offset &&
@@ -258,5 +274,10 @@ export class ScrollSpyService {
     if (this._scrollItems[itemId] != null) {
       delete this._scrollItems[itemId];
     }
+  }
+
+  public destroy(): void {
+    this._onStopListening.next();
+    this._onStopListening.complete();
   }
 }

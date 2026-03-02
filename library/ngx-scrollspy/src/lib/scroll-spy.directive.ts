@@ -1,44 +1,41 @@
-import { Directive, AfterViewInit, Input, ElementRef, HostBinding, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Directive, AfterViewInit, ElementRef, OnDestroy, DestroyRef, inject, input, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ScrollSpyService } from './scroll-spy.service';
 
 @Directive({
-  selector: '[uniScrollSpy]'
+  selector: '[uniScrollSpy]',
+  standalone: true,
+  host: {
+    '[class.active]': 'classActive()'
+  }
 })
 export class ScrollSpyDirective implements AfterViewInit, OnDestroy {
-  @HostBinding('class.active') classActive = false;
+  readonly itemId = input.required<string>({ alias: 'uniScrollSpy' });
+  readonly scrollElement = input<string>('window');
 
-  @Input('uniScrollSpy') itemId: string;
-  @Input() scrollElement = 'window';
+  readonly classActive = signal(false);
 
-  private _subscriber: Subscription;
-
-  constructor(private _el: ElementRef, private _scrollSpyService: ScrollSpyService, private _cdr: ChangeDetectorRef) {}
+  private readonly _el = inject(ElementRef);
+  private readonly _scrollSpyService = inject(ScrollSpyService);
+  private readonly _destroyRef = inject(DestroyRef);
 
   ngOnDestroy(): void {
-    if (this._subscriber) {
-      this._subscriber.unsubscribe();
-    }
-    this._scrollSpyService.deleteItem(this.itemId);
+    this._scrollSpyService.deleteItem(this.itemId());
   }
 
   ngAfterViewInit(): void {
-    this._subscriber = this._scrollSpyService.observe(this.scrollElement).subscribe((element) => {
-      if (element != null) {
-        const _active = element.id === this.itemId;
-        setTimeout(() => {
-          this.classActive = _active;
-          this._cdr.markForCheck();
-        });
-      }
-    });
-    this._scrollSpyService.setItem(this.itemId, this._el, this.scrollElement);
+    this._scrollSpyService
+      .observe(this.scrollElement())
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe((element) => {
+        if (element != null) {
+          this.classActive.set(element.id === this.itemId());
+        }
+      });
+    this._scrollSpyService.setItem(this.itemId(), this._el, this.scrollElement());
 
-    let _keyType = 'id';
-    if (this._scrollSpyService.attributeType === 'data-id') {
-      _keyType = 'data-id';
-    }
-    this._el.nativeElement.setAttribute(_keyType, this.itemId);
+    const keyType = this._scrollSpyService.attributeType === 'data-id' ? 'data-id' : 'id';
+    this._el.nativeElement.setAttribute(keyType, this.itemId());
   }
 }

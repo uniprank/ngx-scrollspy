@@ -1,43 +1,48 @@
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Component, OnInit, ElementRef, DestroyRef, inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MarkdownComponent } from 'ngx-markdown';
 
 import * as Stickyfill from 'stickyfilljs';
 
-import { ScrollSpyService } from '@uniprank/ngx-scrollspy';
+import { ScrollSpyDirective, ScrollItemDirective, ScrollSpyService } from '@uniprank/ngx-scrollspy';
 
 @Component({
-    selector: 'app-test-case3',
-    templateUrl: './test-case3.component.html',
-    styleUrls: ['./test-case3.component.scss']
+  selector: 'app-test-case3',
+  standalone: true,
+  imports: [AsyncPipe, MarkdownComponent, ScrollSpyDirective, ScrollItemDirective],
+  templateUrl: './test-case3.component.html',
+  styleUrls: ['./test-case3.component.scss']
 })
-export class TestCase3Component implements OnInit, OnDestroy {
-    public markdown = require('raw-loader!./README.md');
-    public activeSection: BehaviorSubject<{ id?: string; elementId?: string; nativeElement?: HTMLElement }> = new BehaviorSubject({});
+export class TestCase3Component implements OnInit {
+  public markdown = require('raw-loader!./README.md');
+  public activeSection: BehaviorSubject<{ id?: string; elementId?: string; nativeElement?: HTMLElement }> = new BehaviorSubject({});
 
-    private _subscription: Subscription;
+  private _destroyRef = inject(DestroyRef);
 
-    constructor(private _host: ElementRef, private _scrollSpyService: ScrollSpyService) {}
+  constructor(
+    private _host: ElementRef,
+    private _scrollSpyService: ScrollSpyService
+  ) {}
 
-    ngOnInit() {
-        Stickyfill.add(this._host.nativeElement.querySelector('nav'));
-        // set offset because 2 sticky menu bars width single height of 50px
-        this._scrollSpyService.setOffset('window', 100);
-        // subscribe to window scroll listener, it is also possible to use an ScrollSpyElement id
-        this._subscription = this._scrollSpyService.observe('window').subscribe(item => {
-            if (item != null) {
-                const _nextSection = {
-                    id: item.id,
-                    elementId: item.scrollElementId
-                };
-                this.activeSection.next(_nextSection);
-                console.info(`ScrollSpyService: item:`, item);
-            }
-        });
-    }
-
-    ngOnDestroy() {
-        if (this._subscription) {
-            this._subscription.unsubscribe();
+  ngOnInit() {
+    Stickyfill.add(this._host.nativeElement.querySelector('nav'));
+    // set offset because 2 sticky menu bars width single height of 50px
+    this._scrollSpyService.setOffset('window', 100);
+    // subscribe to window scroll listener, it is also possible to use an ScrollSpyElement id
+    this._scrollSpyService
+      .observe('window')
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe((item) => {
+        if (item != null) {
+          const _nextSection = {
+            id: item.id,
+            elementId: item.scrollElementId
+          };
+          this.activeSection.next(_nextSection);
+          console.info(`ScrollSpyService: item:`, item);
         }
-    }
+      });
+  }
 }

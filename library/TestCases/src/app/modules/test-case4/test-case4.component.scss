@@ -1,87 +1,87 @@
-@import '~library/TestCases/src/styles/library';
+@use 'styles/library' as *;
 
 :host {
-    display: block;
-    padding: 1rem;
+  display: block;
+  padding: 1rem;
 
-    nav {
-        position: -webkit-sticky;
-        position: sticky;
-        top: 50px;
-        background-color: $orange;
+  nav {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 50px;
+    background-color: $orange;
 
-        ul {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: row;
+    ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: row;
 
-            li {
-                list-style: none;
-                margin: 0;
-                padding: 1rem;
-                color: $font-color-invert;
+      li {
+        list-style: none;
+        margin: 0;
+        padding: 1rem;
+        color: $font-color-invert;
 
-                &.active {
-                    color: $orange;
-                    background-color: white;
-                }
-            }
+        &.active {
+          color: $orange;
+          background-color: white;
         }
+      }
+    }
+  }
+
+  .template {
+    @include display-grid;
+    @include grid-template-columns(320px 1fr);
+    @include grid-template-rows(auto);
+
+    & > app-inner-test {
+      @include grid-column(1, 2);
     }
 
-    .template {
-        @include display-grid;
-        @include grid-template-columns(320px 1fr);
-        @include grid-template-rows(auto);
+    & > div {
+      @include grid-column(2, 3);
+    }
+  }
 
-        &>app-inner-test {
-            @include grid-column(1, 2);
-        }
+  .template {
+    display: grid;
+    grid-template-areas: 'sidebar main';
+    grid-template-columns: 320px 1fr;
 
-        &>div {
-            @include grid-column(2, 3);
-        }
+    & > app-inner-test {
+      grid-template: sidebar;
     }
 
-    .template {
-        display: grid;
-        grid-template-areas: "sidebar main";
-        grid-template-columns: 320px 1fr;
+    & > div {
+      grid-template: main;
+    }
+  }
 
-        &>app-inner-test {
-            grid-template: sidebar;
-        }
+  section {
+    height: 1000px;
 
-        &>div {
-            grid-template: main;
-        }
+    > h2 {
+      margin: 0;
     }
 
-    section {
-        height: 1000px;
-
-        >h2 {
-            margin: 0;
-        }
-
-        &.section1 {
-            background-color: #003366;
-            color: $font-color-invert;
-        }
-
-        &.section2 {
-            background-color: #336699;
-            color: $font-color-invert;
-        }
-
-        &.section3 {
-            background-color: #6699CC;
-            color: $font-color-invert;
-        }
-
-        &.section4 {
-            background-color: #99CCFF;
-        }
+    &.section1 {
+      background-color: #003366;
+      color: $font-color-invert;
     }
+
+    &.section2 {
+      background-color: #336699;
+      color: $font-color-invert;
+    }
+
+    &.section3 {
+      background-color: #6699cc;
+      color: $font-color-invert;
+    }
+
+    &.section4 {
+      background-color: #99ccff;
+    }
+  }
 }

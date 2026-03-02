@@ -1,43 +1,38 @@
-import { Directive, Input, Output, EventEmitter, OnDestroy, HostBinding, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Directive, AfterViewInit, DestroyRef, inject, input, output, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ScrollSpyService } from './scroll-spy.service';
 
 @Directive({
-    selector: '[uniScrollItem]'
+  selector: '[uniScrollItem]',
+  standalone: true,
+  host: {
+    '[class.active]': 'classActive()'
+  }
 })
-export class ScrollItemDirective implements OnDestroy, AfterViewInit {
-    @HostBinding('class.active') classActive = false;
+export class ScrollItemDirective implements AfterViewInit {
+  readonly itemId = input.required<string>({ alias: 'uniScrollItem' });
+  readonly scrollElement = input<string>('window');
 
-    @Input('uniScrollItem') itemId: string;
-    @Input() scrollElement = 'window';
+  readonly activeEvent = output<boolean>();
+  readonly classActive = signal(false);
 
-    @Output() activeEvent: EventEmitter<boolean> = new EventEmitter();
+  private readonly _scrollSpyService = inject(ScrollSpyService);
+  private readonly _destroyRef = inject(DestroyRef);
 
-    private _subscriber: Subscription;
-
-    constructor(private _scrollSpyService: ScrollSpyService, private _cdr: ChangeDetectorRef) {}
-
-    ngOnDestroy(): void {
-        if (this._subscriber) {
-            this._subscriber.unsubscribe();
+  ngAfterViewInit(): void {
+    this._scrollSpyService
+      .observe(this.scrollElement())
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe((element) => {
+        let _active: boolean;
+        if (element != null) {
+          _active = element.id === this.itemId();
+          this.activeEvent.emit(_active);
+        } else {
+          _active = false;
         }
-    }
-
-    ngAfterViewInit(): void {
-        this._subscriber = this._scrollSpyService.observe(this.scrollElement).subscribe((element) => {
-            let _active;
-            if (element != null) {
-                _active = element.id === this.itemId;
-                this.activeEvent.emit(_active);
-            } else {
-                _active = false;
-            }
-
-            setTimeout(() => {
-                this.classActive = _active;
-                this._cdr.markForCheck();
-            });
-        });
-    }
+        this.classActive.set(_active);
+      });
+  }
 }

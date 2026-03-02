@@ -1,34 +1,22 @@
 {
-    "compileOnSave": false,
-    "compilerOptions": {
-        "baseUrl": "./",
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
     "downlevelIteration": true,
-        "outDir": "./dist/out-tsc",
-        "sourceMap": true,
-        "declaration": false,
-        "module": "es2020",
-        "moduleResolution": "node",
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "importHelpers": true,
-        "target": "es2015",
-        "typeRoots": [
-            "node_modules/@types", "typings.d.ts"
-        ],
-        "lib": [
-            "es2018",
-            "dom"
-        ],
-        "paths": {
-            "@uniprank/ngx-scrollspy": [
-                "dist/ngx-scrollspy"
-            ],
-            "@uniprank/ngx-scrollspy/*": [
-                "dist/ngx-scrollspy/*"
-            ],
-            "styles-test-cases": [
-                "library/TestCases/src/styles"
-            ]
-        }
-    }
+    "module": "es2022",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2022",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2022", "dom"],
+    "paths": {
+      "@uniprank/ngx-scrollspy": ["dist/ngx-scrollspy"],
+      "@uniprank/ngx-scrollspy/*": ["dist/ngx-scrollspy/*"],
+      "styles-test-cases": ["library/TestCases/src/styles"]
+    },
+    "useDefineForClassFields": false
+  }
 }

@@ -1,25 +1,31 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NgFor, NgClass } from '@angular/common';
+import { MarkdownComponent } from 'ngx-markdown';
 
-import { ScrollSpyService } from '@uniprank/ngx-scrollspy';
+import { ScrollSpyDirective, ScrollSpyService } from '@uniprank/ngx-scrollspy';
+
+import { InnerTestComponent } from './modules/inner-test/inner-test.component';
 
 @Component({
-    selector: 'app-test-case4',
-    templateUrl: './test-case4.component.html',
-    styleUrls: ['./test-case4.component.scss']
+  selector: 'app-test-case4',
+  standalone: true,
+  imports: [NgFor, NgClass, MarkdownComponent, ScrollSpyDirective, InnerTestComponent],
+  templateUrl: './test-case4.component.html',
+  styleUrls: ['./test-case4.component.scss']
 })
 export class TestCase4Component implements OnInit {
-    public markdown = require('raw-loader!./README.md');
-    public sections: Array<any> = [];
+  public markdown = require('raw-loader!./README.md');
+  public sections: Array<any> = [];
 
-    constructor(private _scrollSpyService: ScrollSpyService) {}
+  constructor(private _scrollSpyService: ScrollSpyService) {}
 
-    ngOnInit() {
-        // set offset because 2 sticky menu bars width single height of 50px
-        this._scrollSpyService.setOffset('window', 50);
-        const _sections = [];
-        for (let i = 1; i <= 10; i++) {
-            _sections.push({ id: `section${i}`, name: `Section ${i}` });
-        }
-        this.sections = _sections;
+  ngOnInit() {
+    // set offset because 2 sticky menu bars width single height of 50px
+    this._scrollSpyService.setOffset('window', 50);
+    const _sections = [];
+    for (let i = 1; i <= 10; i++) {
+      _sections.push({ id: `section${i}`, name: `Section ${i}` });
     }
+    this.sections = _sections;
+  }
 }

@@ -1,8 +1,8 @@
-[![travis build](https://img.shields.io/travis/uniprank/ngx-scrollspy?label=Travis%3Abuild&style=flat-square)](https://travis-ci.org/uniprank/ngx-scrollspy)
+[![CI](https://github.com/uniprank/ngx-scrollspy/actions/workflows/ci.yml/badge.svg)](https://github.com/uniprank/ngx-scrollspy/actions/workflows/ci.yml)
 
 You can use this angular service to spy scroll events from `window` or any other scrollable element.
 
-This library implements an service to collect observables from scroll spy directives. It can be used to create you own components or if you prefer use one of the following directives.
+This library implements a service to collect observables from scroll spy directives. It can be used to create your own components or if you prefer use one of the following directives.
 
 See Examples here [Example](https://uniprank.github.io/ngx-scrollspy/test-cases)
 
@@ -14,116 +14,137 @@ First you need to install the npm module:
 npm install @uniprank/ngx-scrollspy --save
 ```
 
-If you use SystemJS to load your files, you might have to update your config with this if you don't use `defaultJSExtensions: true`:
+## Setup (Standalone API)
 
-```js
-System.config({
-  packages: {
-    '@uniprank/ngx-scrollspy': { defaultExtension: 'js' }
-  }
-});
+Use `provideScrollSpy()` in your application config to set up the service:
+
+```typescript
+// app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { provideScrollSpy } from '@uniprank/ngx-scrollspy';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideScrollSpy({ lookAhead: true })
+  ]
+};
 ```
 
-Finally, you can use ngx-scrollspy in your Angular project (NOT AngularJS).
-It is recommended to instantiate `ScrollSpyService` in the bootstrap of your application and to never add it to the "providers" property of your components, this way you will keep it as a singleton.
-If you add it to the "providers" property of a component it will instantiate a new instance of the service that won't be initialized.
+```typescript
+// main.ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { appConfig } from './app/app.config';
 
-```js
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+bootstrapApplication(AppComponent, appConfig);
+```
 
-import { ScrollSpyModule } from '@uniprank/ngx-scrollspy';
+Then import the standalone directives directly in your components:
 
-@NgModule({
-  imports: [BrowserModule, ScrollSpyModule.forRoot()],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent]
+```typescript
+import { Component } from '@angular/core';
+import { ScrollSpyDirective, ScrollItemDirective } from '@uniprank/ngx-scrollspy';
+
+@Component({
+  selector: 'app-example',
+  standalone: true,
+  imports: [ScrollSpyDirective, ScrollItemDirective],
+  template: `
+    <li uniScrollItem="section1">Section 1</li>
+    <section uniScrollSpy="section1">Content</section>
+  `
 })
-export class AppModule {}
+export class ExampleComponent {}
 ```
+
+### Available Directives
+
+| Directive | Selector | Description |
+|-----------|----------|-------------|
+| `ScrollSpyDirective` | `[uniScrollSpy]` | Marks a content section to be tracked by the scroll spy |
+| `ScrollItemDirective` | `[uniScrollItem]` | Marks a navigation item that mirrors the active state |
+| `ScrollElementDirective` | `[uniScrollElement]` | Wraps a custom scrollable container (non-window) |
 
 ## Using
 
 #### Spy window scroll
 
-Use `ScrollSpyDirective` to spy on window as default or set also element to spy on a other scroll able element.
+Use `ScrollSpyDirective` to spy on window as default or set `scrollElement` to spy on another scrollable element.
 
-```js
-import { NgModule, Component, Injectable, AfterViewInit } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+```typescript
+import { Component } from '@angular/core';
+import { ScrollSpyDirective, ScrollItemDirective, ScrollSpyService } from '@uniprank/ngx-scrollspy';
 
-import { ScrollSpyModule, ScrollSpyService, ScrollObjectInterface } from '@uniprank/ngx-scrollspy';
-
-@Injectable()
 @Component({
-	selector: 'app',
-	template: `<div uniScrollSpy="section-abc"></div>`
+  selector: 'app-example',
+  standalone: true,
+  imports: [ScrollSpyDirective, ScrollItemDirective],
+  template: `<div uniScrollSpy="section-abc"></div>`
 })
-export class AppComponent implements AfterViewInit {
-	constructor(private _scrollSpyService: ScrollSpyService) {}
+export class ExampleComponent implements AfterViewInit {
+  constructor(private _scrollSpyService: ScrollSpyService) {}
 
-	ngAfterViewInit() {
-		this._scrollSpyService.getObservable('window').subscribe((element: ScrollObjectInterface) => {
-			console.log('ScrollSpy::window: ', element);
-		});
-	}
+  ngAfterViewInit() {
+    this._scrollSpyService.observe('window').subscribe((element) => {
+      console.log('ScrollSpy::window: ', element);
+    });
+  }
 }
-
-@NgModule({
-  imports: [
-  	BrowserModule,
-  	ScrollSpyModule.forRoot()
-  ],
-  declarations: [
-  	AppComponent
-  ],
-  bootstrap: [ AppComponent ]
-})
 ```
 
 #### Spy any element scroll
 
-Use `ScrollSpyElementDirective` to spy on any element. You must give an unique id to each instance.
-This unique id is called elementID and you need this elementID to connect your `ScrollSpyItemDirective` or your `ScrollSpyDirective`.
+Use `ScrollElementDirective` to spy on any element. You must give a unique id to each instance.
+This unique id is called elementID and you need this elementID to connect your `ScrollItemDirective` or your `ScrollSpyDirective`.
 
-```js
-import { NgModule, Component, Injectable, AfterViewInit } from '@angular/core';
-import { ScrollSpyModule, ScrollSpyService, ScrollObjectInterface } from '@uniprank/ngx-scrollspy';
+```typescript
+import { Component, AfterViewInit } from '@angular/core';
+import {
+  ScrollSpyDirective,
+  ScrollItemDirective,
+  ScrollElementDirective,
+  ScrollSpyService,
+  ScrollObjectInterface
+} from '@uniprank/ngx-scrollspy';
 
-@Injectable()
 @Component({
-	selector: 'yourComponent',
+  selector: 'app-example',
+  standalone: true,
+  imports: [ScrollSpyDirective, ScrollItemDirective, ScrollElementDirective],
   template: `
-  <div uniScrollSpyItem="part2" scrollElement="test">Get class active if part2 is in focus.</div>
-	<div uniScrollSpyElement="test" style="max-height: 100px; overflow: auto;">
-		<div uniScrollSpy="part1" style="height: 500px;"></div>
-		<div uniScrollSpy="part2" style="height: 500px;"></div>
-	</div>`
+    <div uniScrollItem="part2" scrollElement="test">Get class active if part2 is in focus.</div>
+    <div uniScrollElement="test" style="max-height: 100px; overflow: auto;">
+      <div uniScrollSpy="part1" style="height: 500px;"></div>
+      <div uniScrollSpy="part2" style="height: 500px;"></div>
+    </div>
+  `
 })
-export class YourComponent implements AfterViewInit {
+export class ExampleComponent implements AfterViewInit {
+  constructor(private _scrollSpyService: ScrollSpyService) {}
 
-	constructor(private _scrollSpyService: ScrollSpyService) {}
-
-	ngAfterViewInit() {
-		this._scrollSpyService.getObservable('test').subscribe((element: ScrollObjectInterface) => {
-			console.log('ScrollSpy::test: ', element);
-		});
-	}
+  ngAfterViewInit() {
+    this._scrollSpyService.observe('test').subscribe((element: ScrollObjectInterface) => {
+      console.log('ScrollSpy::test: ', element);
+    });
+  }
 }
-
-@NgModule({
-  imports: [
-		ScrollSpyModule
-  ],
-  declarations: [
-  	AppComponent
-  ],
-  providers: [ ]
-})
-export class YourModule { }
 ```
 
-Because `ScrollSpyService` is a singleton, you can get any ScrollSpy observable from anywhere withing your application.
+Because `ScrollSpyService` is a singleton, you can get any ScrollSpy observable from anywhere within your application.
+
+## Parameters
+
+You can pass optional parameters to `provideScrollSpy()`:
+
+| Parameter | Value | Description |
+|-----------|-------|-------------|
+| `lookAhead` | boolean | Set the first item active even if it's not already in the viewport |
+| `activateOnlySetItems` | boolean | Only activate items when fully within the viewport |
+| `attributeType` | `'id'` \| `'data-id'` | Which HTML attribute to set on spy elements (default: `'id'`) |
+
+```typescript
+provideScrollSpy({ lookAhead: true })
+```
 
 # TODO:
 

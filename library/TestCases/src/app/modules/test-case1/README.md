@@ -2,18 +2,27 @@ You can find the complete test case at GitHub. [Test Case 1](https://github.com/
 
 ## TestCase1Component
 
-```js
+```typescript
+import { Component, OnInit, ElementRef } from '@angular/core';
+
+import { ScrollSpyDirective, ScrollItemDirective, ScrollSpyService } from '@uniprank/ngx-scrollspy';
+
 @Component({
-    selector: 'app-test-case1',
-    templateUrl: './test-case1.component.html',
-    styleUrls: ['./test-case1.component.scss']
+  selector: 'app-test-case1',
+  standalone: true,
+  imports: [ScrollSpyDirective, ScrollItemDirective],
+  templateUrl: './test-case1.component.html',
+  styleUrls: ['./test-case1.component.scss']
 })
 export class TestCase1Component implements OnInit {
-    constructor(private _scrollSpyService: ScrollSpyService) {}
+  constructor(
+    private _host: ElementRef,
+    private _scrollSpyService: ScrollSpyService
+  ) {}
 
-    ngOnInit() {
-        this._scrollSpyService.setOffset('window', 100);
-    }
+  ngOnInit() {
+    this._scrollSpyService.setOffset('window', 100);
+  }
 }
 ```
 
@@ -21,15 +30,15 @@ export class TestCase1Component implements OnInit {
 
 ```html
 <nav>
-    <ul>
-        <li uniScrollItem="section1">Section 1</li>
-        <li uniScrollItem="section2">Section 2</li>
-        <li uniScrollItem="section3">Section 3</li>
-        <li uniScrollItem="section4">Section 4</li>
-    </ul>
+  <ul>
+    <li uniScrollItem="section1">Section 1</li>
+    <li uniScrollItem="section2">Section 2</li>
+    <li uniScrollItem="section3">Section 3</li>
+    <li uniScrollItem="section4">Section 4</li>
+  </ul>
 </nav>
-<section uniScrollSpy="section1"></section>
-<section uniScrollSpy="section2"></section>
-<section uniScrollSpy="section3"></section>
-<section uniScrollSpy="section4"></section>
+<section uniScrollSpy="section1" class="section1"></section>
+<section uniScrollSpy="section2" class="section2"></section>
+<section uniScrollSpy="section3" class="section3"></section>
+<section uniScrollSpy="section4" class="section4"></section>
 ```
