@@ -13,9 +13,9 @@ import { ScrollItemDirective } from '@uniprank/ngx-scrollspy';
   styleUrls: ['./inner-test.component.scss']
 })
 export class InnerTestComponent implements OnInit {
-  @Input() sections: Array<{ id: string; name: string }> = [];
+  @Input() sections: { id: string; name: string }[] = [];
 
-  showSection: Array<{ id: string; name: string; base: boolean }> = [];
+  showSection: { id: string; name: string; base: boolean }[] = [];
 
   constructor(private _host: ElementRef) {}
 
@@ -24,8 +24,8 @@ export class InnerTestComponent implements OnInit {
     Stickyfill.add(this._host.nativeElement.querySelector('.sticky'));
   }
 
-  private _generateMenu(): Array<{ id: string; name: string; base: boolean }> {
-    const _sections: Array<{ id: string; name: string; base: boolean }> = [];
+  private _generateMenu(): { id: string; name: string; base: boolean }[] {
+    const _sections: { id: string; name: string; base: boolean }[] = [];
     _sections.push({
       id: null,
       name: 'Main category',

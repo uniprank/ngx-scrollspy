@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, InjectionToken, inject, DestroyRef } from '@angular/core';
+import { Injectable, ElementRef, InjectionToken, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BehaviorSubject, Observable, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
@@ -112,26 +112,20 @@ export class ScrollSpyService {
   }
 
   public setScrollElement(scrollElementId: string, elementRef: ElementRef, direction: ScrollDirectionEnum, offset = 0): void {
-    this._checkScrollElementNotExists(scrollElementId);
+    const existing = this._scrollElements[scrollElementId];
+    if (existing != null && existing.elementRef.nativeElement.isConnected) {
+      throw new Error(`ScrollSpyService: The scroll element with the id [${scrollElementId}] already exists in the DOM.`);
+    }
     this._initScrollElementListener(scrollElementId, this._generateScrollElement(scrollElementId, elementRef, direction, offset));
   }
 
-  private _checkScrollElementNotExists(scrollElementId: string): void {
-    if (this._scrollElements[scrollElementId] != null) {
-      throw new Error(`ScrollSpyService: The scroll element with the id [${scrollElementId}] exists.`);
-    }
-  }
-
   public setItem(itemId: string, elementRef: ElementRef, scrollElementId = defaultElementId): void {
-    this._checkItemNotExists(itemId);
+    const existing = this._scrollItems[itemId];
+    if (existing != null && existing.nativeElement.isConnected) {
+      throw new Error(`ScrollSpyService: The scroll item with the id [${itemId}] already exists in the DOM.`);
+    }
     this._scrollItems[itemId] = this._generateScrollObject(itemId, elementRef, scrollElementId);
     this._setDefaultItem(itemId, scrollElementId);
-  }
-
-  private _checkItemNotExists(itemId: string): void {
-    if (this._scrollItems[itemId] != null) {
-      throw new Error(`ScrollSpyService: The scroll item with the id [${itemId}] exists.`);
-    }
   }
 
   private _generateScrollObject(id: string, elementRef: ElementRef, scrollElementId: string): ScrollObjectInterface {

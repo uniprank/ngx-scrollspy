@@ -16,8 +16,9 @@ import { ScrollSpyDirective, ScrollItemDirective, ScrollSpyService } from '@unip
   styleUrls: ['./test-case3.component.scss']
 })
 export class TestCase3Component implements OnInit {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   public markdown = require('raw-loader!./README.md');
-  public activeSection: BehaviorSubject<{ id?: string; elementId?: string; nativeElement?: HTMLElement }> = new BehaviorSubject({});
+  public activeSection = new BehaviorSubject<{ id?: string; elementId?: string; nativeElement?: HTMLElement }>({});
 
   private _destroyRef = inject(DestroyRef);
 

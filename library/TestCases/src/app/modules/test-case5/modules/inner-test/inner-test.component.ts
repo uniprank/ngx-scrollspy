@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { NgFor } from '@angular/common';
 
 import { ScrollItemDirective } from '@uniprank/ngx-scrollspy';
@@ -11,10 +11,6 @@ import { ScrollItemDirective } from '@uniprank/ngx-scrollspy';
   styleUrls: ['./inner-test.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InnerTestComponent implements OnInit {
-  @Input() sections: Array<{ id: string; name: string }> = [];
-
-  constructor() {}
-
-  ngOnInit() {}
+export class InnerTestComponent {
+  @Input() sections: { id: string; name: string }[] = [];
 }

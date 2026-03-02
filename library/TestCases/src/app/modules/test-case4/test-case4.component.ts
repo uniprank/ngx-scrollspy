@@ -14,8 +14,9 @@ import { InnerTestComponent } from './modules/inner-test/inner-test.component';
   styleUrls: ['./test-case4.component.scss']
 })
 export class TestCase4Component implements OnInit {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   public markdown = require('raw-loader!./README.md');
-  public sections: Array<any> = [];
+  public sections: { id: string; name: string }[] = [];
 
   constructor(private _scrollSpyService: ScrollSpyService) {}
 

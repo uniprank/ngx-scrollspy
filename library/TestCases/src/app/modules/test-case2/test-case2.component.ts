@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MarkdownComponent } from 'ngx-markdown';
 
 import { ScrollSpyDirective, ScrollItemDirective, ScrollElementDirective } from '@uniprank/ngx-scrollspy';
@@ -10,9 +10,7 @@ import { ScrollSpyDirective, ScrollItemDirective, ScrollElementDirective } from 
   templateUrl: './test-case2.component.html',
   styleUrls: ['./test-case2.component.scss']
 })
-export class TestCase2Component implements OnInit {
+export class TestCase2Component {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   public markdown = require('raw-loader!./README.md');
-  constructor() {}
-
-  ngOnInit() {}
 }

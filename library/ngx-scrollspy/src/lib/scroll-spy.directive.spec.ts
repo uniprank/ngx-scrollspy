@@ -4,7 +4,7 @@ import { waitForAsync, ComponentFixture, TestBed, tick } from '@angular/core/tes
 import { ScrollSpyDirective } from './scroll-spy.directive';
 import { SPY_CONFIG } from './scroll-spy.service';
 
-export function advance(fixture: ComponentFixture<any>, tickCount = 1): void {
+export function advance(fixture: ComponentFixture<unknown>, tickCount = 1): void {
   tick(tickCount);
   fixture.detectChanges();
 }

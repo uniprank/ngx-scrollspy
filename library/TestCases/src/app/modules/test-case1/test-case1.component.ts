@@ -13,6 +13,7 @@ import { ScrollSpyDirective, ScrollItemDirective, ScrollSpyService } from '@unip
   styleUrls: ['./test-case1.component.scss']
 })
 export class TestCase1Component implements OnInit {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   public markdown = require('raw-loader!./README.md');
   constructor(
     private _host: ElementRef,
