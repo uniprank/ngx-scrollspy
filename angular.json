@@ -30,7 +30,7 @@
           }
         },
         "lint": {
-          "builder": "angular-eslint:lint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": ["library/ngx-scrollspy/**/*.ts", "library/ngx-scrollspy/**/*.html"]
           }
@@ -139,7 +139,7 @@
           }
         },
         "lint": {
-          "builder": "angular-eslint:lint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": ["library/TestCases/**/*.ts", "library/TestCases/**/*.html"]
           }
