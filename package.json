@@ -11,7 +11,7 @@
     "test:ci": "ng test ngx-scrollspy --watch=false --code-coverage --no-progress --browsers=ChromeHeadless",
     "test:watch": "ng test ngx-scrollspy --watch",
     "lint": "ng lint",
-    "publish": "cd dist/ngx-scrollspy && npm publish --access public",
+    "release:publish": "rm -rf dist/ngx-scrollspy && npm run build && cd dist/ngx-scrollspy && npm publish --access public",
     "version": "npm pkg set version=$npm_package_version --prefix library/ngx-scrollspy && git add library/ngx-scrollspy/package.json",
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags",
     "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags",
